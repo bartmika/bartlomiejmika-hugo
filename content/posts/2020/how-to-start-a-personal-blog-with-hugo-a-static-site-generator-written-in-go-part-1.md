@@ -88,18 +88,20 @@ Once your prerequisites have been met, continue with instructions here.
 
 9. Open your browsers and visit [http://localhost:1313/](http://localhost:1313/) to view your site. If something appears then congratulations you have setup your site! The next step is you'll need to look through the project and spend time customizing it.
 
-10. Create a new repo in github and call it ``bartlomiejmika-hugo``, copy the HTTPS address ``https://github.com/bartmika/bartlomiejmika-hugo.git`` and add it as the remote git server for this project with the following command.
+10. Create a new repo in github and call it ``bartlomiejmika-hugo``, copy the HTTPS address ``https://github.com/bartmika/bartlomiejmika-hugo.git`` (see below) ![Custom Domain Setting](/img/2020/09/2-1.png)
 
-```
-git remote add origin https://github.com/bartmika/bartlomiejmika-hugo.git
-```
+    Add it as the remote git server for this project with the following command.
+
+      ```bash
+      $ git remote add origin https://github.com/bartmika/bartlomiejmika-hugo.git
+      ```
 
 11. Commit all your code and you should be good!
 
-```
-git add --all;
-git commit -m 'Initial commit';
-git push origin master;
-```
+      ```bash
+      $ git add --all;
+      $ git commit -m 'Initial commit';
+      $ git push origin master;
+      ```
 
 12. You are finished.
