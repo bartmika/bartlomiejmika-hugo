@@ -23,14 +23,16 @@ What you need for this article:
 
 The first thing we need to do is to have the DNS information from our site point to GitHub's. Depending on your domain name service provider, you will have to read the details. If you have **Namecheap** then you read [this article](https://www.namecheap.com/support/knowledgebase/article.aspx/9645/2208/how-do-i-link-my-domain-to-github-pages).
 
-## Setup GitHub Repo
+## Setup GitHub Pages
 
+### bartmika.github.io repo
 You will need to create a git repository dedicated to your sites static content. Click the Create repository button and name it **bartmika.github.io**.
 
 Go into your repository's settings and set the **Custom Domain** field to your domain address:
 
 ![Custom Domain Setting](/img/2020/09/3-1.png)
 
+### bartlomiejmika-hugo repo
 Great, now what we want to do is link it with our **bartlomiejmika-hugo** repository as a submodule. Once connected we will use ``hugo`` to build our static website and save it into our **bartmika.github.io** repository where GitHub will publish it onto the internet; furthermore, because we have our domain name host mapped to GitHub, our website will resolve. To begin, inside your **bartlomiejmika-hugo** repository please write:
 
 ```
@@ -43,3 +45,28 @@ Create file called ``CNAME`` and populate it with your domain name:
 ```
 echo "bartlomiejmika.com" > CNAME
 ```
+
+Save your latest changes
+
+```bash
+$ git add --all;
+$ git commit -m 'Created sub-module with the `bartmika.github.io` repo.';
+$ git push origin master;
+```
+
+Finally, how do we generate our static website using ``hugo``? Simple, run the following command:
+
+```bash
+$ hugo --minify
+```
+
+And it's built! We are ready to go into our sub-module, commit our output and submit it to GitHub, where once it's submitted will deploy our site content onto the internet! Exciting! Here's the code:
+
+```bash
+$ cd public
+$ git add --all;
+$ git commit -m 'Initial commit of website content.';
+$ git push origin master;
+```
+
+To confirm, please wait 24 hours for the DNS information to propagate but once it's finished you can see your site up when you enter your domain [bartlomiejmika.com](https://bartlomiejmika.com).
