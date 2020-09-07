@@ -104,4 +104,6 @@ Once your prerequisites have been met, continue with instructions here.
       $ git push origin master;
       ```
 
-12. You are finished.
+12. You are finished. This means you can now start writing blogs on your local machine for now. When you are ready to publish your site to the internet, please follow the instructions in **[part 2](/posts/2020/how-to-start-a-personal-blog-with-hugo-a-static-site-generator-written-in-go-part-2/)** of this series.
+
+Thank you and have a great day!
