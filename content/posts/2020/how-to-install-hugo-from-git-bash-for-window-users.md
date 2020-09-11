@@ -33,7 +33,20 @@ In the previous [articles](/posts/2020/how-to-start-a-personal-blog-with-hugo-a-
 
 6. You should see the terminal loaded up.
 
-7. Let's install [``hugo``](https://github.com/gohugoio/hugo) via this command:
+7. Before we install [``hugo``](https://github.com/gohugoio/hugo), we will need to setup our ``go`` local environment:
+
+    ```bash
+    cd ~/
+    mkdir go
+    cd go
+    mkdir bin
+    mkdir pkg
+    mkdir src
+    cd src
+    mkdir github.com
+    ```
+
+8. Let's install [``hugo``](https://github.com/gohugoio/hugo) via this command:
 
     ```bash
     cd ~/go/src/github.com/
@@ -44,13 +57,13 @@ In the previous [articles](/posts/2020/how-to-start-a-personal-blog-with-hugo-a-
     go install
     ```
 
-8. Confirm our [``hugo``](https://github.com/gohugoio/hugo) application has been installed:
+9. Confirm our [``hugo``](https://github.com/gohugoio/hugo) application has been installed:
 
     ```bash
     $GOPATH/bin/hugo
     ```
 
-9. Once confirmed you are ready to continue! The next few sections we will create the folder of our [GitHub](https://github.com) username, my username is ["bartmika"](https://github.com/bartmika) so I am writing with it, please use your own username and follow along:
+10. Once confirmed you are ready to continue! The next few sections we will create the folder of our [GitHub](https://github.com) username, my username is ["bartmika"](https://github.com/bartmika) so I am writing with it, please use your own username and follow along:
 
     ```bash
     cd ~/go/src/github.com
@@ -58,29 +71,29 @@ In the previous [articles](/posts/2020/how-to-start-a-personal-blog-with-hugo-a-
     cd bartmika
     ```
 
-10. Create our site. My recommendation is use the format "your-domain" + "-hugo" were "your-domain" is the name of your website and "-hugo" indicates this is a [``hugo``](https://github.com/gohugoio/hugo) project. Please note, my website domain is [bartlomiejmika.com](https://bartlomiejmika.com) so I will be writing with "bartlomiejmika-hugo" with the following:
+11. Create our site. My recommendation is use the format "your-domain" + "-hugo" were "your-domain" is the name of your website and "-hugo" indicates this is a [``hugo``](https://github.com/gohugoio/hugo) project. Please note, my website domain is [bartlomiejmika.com](https://bartlomiejmika.com) so I will be writing with "bartlomiejmika-hugo" with the following:
 
     ```bash
     $GOPATH/bin/hugo new site bartlomiejmika-hugo
     cd bartlomiejmika-hugo
     ```
 
-11. Create your first post.
+12. Create your first post.
 
     ```bash
     $GOPATH/bin/hugo new posts/hello-world.md
     ```
 
-12. Copy the contents from [this sample post file](https://raw.githubusercontent.com/halogenica/beautifulhugo/master/exampleSite/content/post/2015-01-04-first-post.md) into your file located at ``content/posts/hello-world.md``.
+13. Copy the contents from [this sample post file](https://raw.githubusercontent.com/halogenica/beautifulhugo/master/exampleSite/content/post/2015-01-04-first-post.md) into your file located at ``content/posts/hello-world.md``.
 
 
-13. Let's confirm our site works by running the ``hugo server`` command which will generate the site and run it. Please note everytime you make a change in your any file the [``hugo``](https://github.com/gohugoio/hugo) server will **hotreload** the site with your latest content. Also note the ``-D`` flag enables **draft** articles which you are writing to be displayed on the site:
+14. Let's confirm our site works by running the ``hugo server`` command which will generate the site and run it. Please note everytime you make a change in your any file the [``hugo``](https://github.com/gohugoio/hugo) server will **hotreload** the site with your latest content. Also note the ``-D`` flag enables **draft** articles which you are writing to be displayed on the site:
 
       ```bash
       hugo server -D
       ```
 
-14. Open your browsers and visit [http://localhost:1313/](http://localhost:1313/) to view your site. If something appears then congratulations you have setup your site! The next step is you'll need to look through the project and spend time customizing it.
+15. Open your browsers and visit [http://localhost:1313/](http://localhost:1313/) to view your site. If something appears then congratulations you have setup your site! The next step is you'll need to look through the project and spend time customizing it.
 
 Thank you for reading, if you want to learn how create a website with a beautiful theme then please another article I've written titled ["How to Start a Personal Blog With Hugo a Static Site Generator Written in Go"](/posts/2020/how-to-start-a-personal-blog-with-hugo-a-static-site-generator-written-in-go-part-1/).
 
