@@ -1,6 +1,6 @@
 ---
-title: "How to Write a Webserver in Golang - Part 1"
-subtitle: "Learn how to setup the project scaffolding using the standard library"
+title: "How to write a webserver in Golang using only the std net/http - Part 1"
+subtitle: "Learn how to setup a small project and make simple GET / POST / PUT / DELETE requests using only the standard library net/http"
 date: 2021-01-25T00:02:30-04:00
 draft: false
 categories:
@@ -24,7 +24,8 @@ However in Golang, this general popular opinion is not held firm. The standard l
 I have used (and am using) [``go-chi``](https://github.com/go-chi/chi) and [``fibre``](https://github.com/gofiber/fiber) web libraries and I would highly recommend both. For this article, I want to explore what's involved with writing an application *without* any external library and only the provided [``http``](https://golang.org/pkg/net/http/) library.
 
 # What do I need?
-You will need Golang version 1.15+ installed on your development machine.
+1. You will need Golang version 1.15+ installed on your development machine.
+2. You will need to know the basics of Golang. I am assuming you've finished learning about how Golang works and you are looking to learn how to start coding a webserver for a API restful purposes.
 
 # Requirements - What are we building?
 ## a. Features
