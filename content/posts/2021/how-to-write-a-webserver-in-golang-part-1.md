@@ -51,7 +51,6 @@ The name of our application will be called ``mulberry`` and it will exist in a c
 ## a. Project Structure
 In Golang, there is no official project structure; as a result, the onus is on the developer to structure a correct project hierarchy. A popular solution developers choose is the [following convention](https://github.com/golang-standards/project-layout). Our application's structure will look as follows:
 
-
 ```
 📦mulberry-server
 │   📄README.md
@@ -64,6 +63,9 @@ In Golang, there is no official project structure; as a result, the onus is on t
     │
     └───📁api
     │      📄api.go
+    │
+    └───📁manager
+    │      📄manager.go
     │
     └───📁models
            📄model.go
@@ -138,7 +140,7 @@ Before we write any API related functionality, let's structure our code with a g
 
 Begin with our ``serve.go`` file with the following contents:
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/cmd/serve.go
 package main
 
@@ -179,7 +181,7 @@ func main() {
     // active connections and reject any new connections.
     manager.StopMainRuntimeLoop()
 }
-```
+{{</ highlight >}}
 
 Study the code and you should take away the following benefits:
 
@@ -188,7 +190,7 @@ Study the code and you should take away the following benefits:
 
 Next we need to create our application manager which is in essence the *controller*. This file will be responsible for starting up and managing the (a) database and (b) API.
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/internal/manager/manager.go
 package manager
 
@@ -228,11 +230,11 @@ func (m *Manager) StopMainRuntimeLoop() error {
     log.Println("Finished gaceful shutdown")
     return nil
 }
-```
+{{</ highlight >}}
 
 Next we'll create an ``APIServer`` structure. All our API functions will be methods belonging to this struct. This section can be considered both the *view* and *controller*.
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/internal/api/api.go
 package api
 
@@ -245,11 +247,11 @@ func NewAPIServer () (*APIServer, error) {
 }
 
 //TODO: Implement functions
-```
+{{</ highlight >}}
 
 And finally the *model* layer, we will create the ``Store`` structure so all our database methods will be utilizing it.
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/internal/models/models.go
 package models
 
@@ -264,7 +266,7 @@ func NewStore() (*Store) {
 }
 
 //TODO: Implement functions.
-```
+{{</ highlight >}}
 
 Copy and paste the above code to confirm no compilation errors. Study the code. Notice the following key points:
 
@@ -280,7 +282,7 @@ Let us learn how to create our first API endpoint, the ``/api/v1/version`` URL p
 
 To begin, we need to update ``manager.go`` as follows:
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/internal/manager/manager.go
 package manager
 
@@ -314,7 +316,7 @@ func NewManager() (*Manager, error) {
     router := http.NewServeMux()
 
     // STEP 5: Define URL paths that the `RouteHandler` will handle.
-    router.HandleFunc("/api/v1/version", as.RouteHandler)
+    router.HandleFunc("/", as.HandleRequests)
 
     port := os.Getenv("SERVERPORT")
     if port == "" {
@@ -360,11 +362,11 @@ func (m *Manager) StopMainRuntimeLoop() error {
     log.Println("Finished gaceful shutdown")
     return nil
 }
-```
+{{</ highlight >}}
 
 Next we need to update the API as follows:
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/internal/api/api.go
 package api
 
@@ -404,11 +406,11 @@ func (as *APIServer) RouteHandler(w http.ResponseWriter, req *http.Request) {
     http.Error(w, fmt.Sprintf("Unexpected method and URL path`, got %v", req.Method), http.StatusMethodNotAllowed)
     return
 }
-```
+{{</ highlight >}}
 
 And finally we will need to create a new file called ``version_api.go`` with the contents of:
 
-```go
+{{< highlight golang "linenos=false">}}
 // github.com/bartmika/mulberry-server/internal/api/version_api.go
 package api
 
@@ -420,7 +422,7 @@ func (as *APIServer) getVersionHandler(w http.ResponseWriter, req *http.Request)
     w.Header().Set("Content-Type", "application/json")
     w.Write([]byte("Mulberry Server v1.0"))
 }
-```
+{{</ highlight >}}
 
 In summary the project hierarchy should look as follows:
 
@@ -438,6 +440,9 @@ In summary the project hierarchy should look as follows:
     │      📄api.go
     │      📄version_api.go
     │
+    └───📁manager
+    │      📄manager.go
+    │
     └───📁models
            📄model.go
 ```
@@ -445,7 +450,7 @@ In summary the project hierarchy should look as follows:
 Finally start the server and confirm everything works:
 
 ```bash
-SERVERPORT=5656 go run cmd/serve.go;
+$ SERVERPORT=5656 go run cmd/serve.go;
 ```
 
 If you see a message saying the server started then congratulations, you have setup the project scaffolding!
@@ -455,12 +460,12 @@ If you see a message saying the server started then congratulations, you have se
 Before you begin, please install the [``httpie``](https://httpie.io/) application. Once installed, please run the following code to confirm we can make an API call:
 
 ```bash
-http get 127.0.0.1:5656/api/v1/version
+$ http get 127.0.0.1:5656/api/v1/version
 ```
 
 If you get a result somewhat similar like this, then condradulations!
 
-```text
+```
 Last login: Thu Jan 28 00:10:01 on ttys015
 bmika@MACMINI-AFA2131 mulberry-server % http get 127.0.0.1:5656/api/v1/version
 HTTP/1.1 200 OK
@@ -470,3 +475,146 @@ Date: Fri, 29 Jan 2021 05:03:22 GMT
 
 Mulberry Server v1.0
 ```
+
+## f. Implement our remaining API endpoints
+
+Before we begin, you have to be aware of an issue, the issue is that the std ``net/http`` does not add any support for **URL Arguments** such as ``/api/v1/time-series-datum/:uuid``. As a result, Golang developers are torn between using a third-party package, structuring your API endpoints differently, or writing your own custom router.
+
+For more on this topic, please see the following links:
+
+* [Go’s std net/http is all you need … right?](https://archive.is/T4cp0)
+* [How to not use an http-router in go](https://archive.is/6hptY)
+* [Different approaches to HTTP routing in Go](https://archive.is/ZpZg6)
+
+Given these options, what should we do? From the beginners perspective, the [split switch](https://benhoyt.com/writings/go-routing/#split-switch) seems like the easiest to do, in addition it's quite performant with the cost of slightly ugly looking code.
+
+Before we begin, make sure your project hierarchy should look as follows by creating the ``tsd_api.go`` file in your project:
+
+```
+📦mulberry-server
+│   📄README.md
+│   📄Makefile
+│
+└───📁cmd
+|      📄serve.go
+│
+└───📁internal
+    │
+    └───📁api
+    │      📄api.go
+    │      📄tsd_api.go
+    │      📄version_api.go
+    │
+    └───📁manager
+    │      📄manager.go
+    │
+    └───📁models
+           📄model.go
+```
+
+Therefore, the code will look like this:
+
+{{< highlight golang "linenos=false">}}
+// FILE LOCATION: github.com/bartmika/mulberry-server/internal/api/api.go
+package api
+
+import (
+    "fmt"
+    "strings"
+    "net/http"
+)
+
+type APIServer struct {
+    //TODO: Implement properties
+}
+
+func NewAPIServer () (*APIServer, error) {
+    return nil, nil //TODO: Implement
+}
+
+func (as *APIServer) HandleRequests(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+
+    // Split path into slash-separated parts, for example, path "/foo/bar"
+    // gives p==["foo", "bar"] and path "/" gives p==[""]. Our API starts with
+    // "/api/v1", as a result we will start the array slice at "3".
+    p := strings.Split(r.URL.Path, "/")[3:]
+    n := len(p)
+
+    // fmt.Println(p, n) // For debugging purposes only.
+
+    switch {
+    case n == 1 && p[0] == "version" && r.Method == http.MethodGet:
+        as.getVersionHandler(w, r)
+    case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodGet:
+        as.getTimeSeriesDataHandler(w, r)
+    case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodPost:
+        as.postTimeSeriesDatumHandler(w, r)
+    case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodGet:
+        as.getTimeSeriesDatumHandler(w, r, p[1])
+    case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodPut:
+        as.putTimeSeriesDatumHandler(w, r, p[1])
+    case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodDelete:
+        as.deleteTimeSeriesDatumHandler(w, r, p[1])
+    default:
+        // Defensive Code: The catch-all code which will error if user did not
+        //                 make a request that our function supports.
+        http.Error(w, fmt.Sprintf("Unexpected method and URL path`, got %v", r.Method), http.StatusMethodNotAllowed)
+    }
+}
+{{</ highlight >}}
+
+And
+
+{{< highlight golang "linenos=false">}}
+// FILE LOCATION: github.com/bartmika/mulberry-server/internal/api/tsd_api.go
+package api
+
+import (
+    "net/http"
+)
+
+func (as *APIServer) getTimeSeriesDataHandler(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("TODO: List Time Series Data")) //TODO: IMPLEMENT.
+}
+
+func (as *APIServer) postTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("TODO: Create Series Data")) //TODO: IMPLEMENT.
+}
+
+func (as *APIServer) getTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request, uuid string) {
+    w.Write([]byte("TODO: Get Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
+}
+
+func (as *APIServer) putTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request, uuid string) {
+    w.Write([]byte("TODO: Update Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
+}
+
+func (as *APIServer) deleteTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request, uuid string) {
+    w.Write([]byte("TODO: Delete Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
+}
+{{</ highlight >}}
+
+And finally to test out making API calls, we have the following commands you can run in your console.
+
+```bash
+$ http get 127.0.0.1:5656/api/v1/version
+
+$ http get 127.0.0.1:4112/api/v1/time-series-data
+
+$ http post 127.0.0.1:4112/api/v1/time-series-data instrument_id="1" timestamp="2021-01-01"
+
+$ http get 127.0.0.1:4112/api/v1/time-series-datum/xxx
+
+$ http put 127.0.0.1:4112/api/v1/time-series-datum/xxx instrument_id="1" timestamp="2021-01-02"
+
+$ http delete 127.0.0.1:4112/api/v1/time-series-datum/xxx
+```
+
+That's it! We have ourselves a basic API web-app. We have dipped our feat on the shores of the ocean of Golang web-development and the water feels welcoming. Moving forward we'll need to cover more topics such as:
+
+* How do we read ``post``/``put`` requests? How do we write responses?
+* How do we handle using a database?
+* How do we handle login and authenticated API endpoints?
+* How do we handle sessions?
+* How do we handle background processes?
