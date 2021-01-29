@@ -22,9 +22,10 @@ The purpose of this article is to provide instructions on how to setup a simple 
 * Requirements - What are we building?
 * Design - How will it work?
   - a. Project Structure
-  - b. API
+  - b. API Endpoints
   - c. Command Console
   - d. Coding Style
+  - e. Datastructure
 * Implementation - Let's build our code!
   - a. Project Location
   - b. Code repository
@@ -84,7 +85,7 @@ In Golang, there is no official project structure; as a result, the onus is on t
            📄model.go
 ```
 
-## b. API
+## b. API Endpoints
 
 We will have the following API endpoints:
 
@@ -118,6 +119,28 @@ At the end of the project, please be sure to run:
 ```bash
 $ go fmt $HOME/go/src/github.com/bartmika/mulberry-server/...
 ```
+
+## e. Datastructure
+
+Our app will work with time-series data.
+
+{{< highlight golang "linenos=false">}}
+// models.go
+
+type User struct {
+    //TODO: We will implement in another article!
+}
+
+type TimeSeriesDatum struct {
+    Uuid         string
+    InstrumentId uint64
+    Value        float64
+    Timestamp    time.Time
+    UserId       uint64
+}
+{{</ highlight >}}
+
+Please note, we won't be implementing the datastructure in this article.
 
 # Implementation - Let's build our code!
 ## a. Project Location
@@ -580,9 +603,7 @@ func (as *APIServer) HandleRequests(w http.ResponseWriter, r *http.Request) {
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodDelete:
         as.deleteTimeSeriesDatumHandler(w, r, p[1])
     default:
-        // Defensive Code: The catch-all code which will error if user did not
-        //                 make a request that our function supports.
-        http.Error(w, fmt.Sprintf("Unexpected method and URL path`, got %v", r.Method), http.StatusMethodNotAllowed)
+        http.NotFound(w, r)
     }
 }
 {{</ highlight >}}
