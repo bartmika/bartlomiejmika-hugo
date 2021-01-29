@@ -35,7 +35,7 @@ enableGitInfo = true
 
 [[Params.bigimg]]
  src = "img/triangle.jpg"
- desc = "Triangle"
+ desc = ""
 #[[Params.bigimg]]
 #  src = "img/sphere.jpg"
 #  desc = "Sphere"
@@ -117,3 +117,8 @@ enableGitInfo = true
     name = "Tags"
     url = "tags"
     weight = 3
+
+[[menu.main]]
+    name = "RSS"
+    url = "index.xml"
+    weight = 4
