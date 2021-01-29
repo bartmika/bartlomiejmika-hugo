@@ -16,6 +16,24 @@ The purpose of this article is to provide instructions on how to setup a simple 
 
 <!--more-->
 
+# Table of Contents
+* Why [``http``](https://golang.org/pkg/net/http/) Standard Library?
+* What do I need?
+* Requirements - What are we building?
+* Design - How will it work?
+  - a. Project Structure
+  - b. API
+  - c. Command Console
+  - d. Coding Style
+* Implementation - Let's build our code!
+  - a. Project Location
+  - b. Code repository
+  - c. Golang Modules
+  - d. Start with the Project Scaffolding
+  - e. Start with the API Scaffolding
+  - f. Make an API call
+  - g. Implement our remaining API endpoints
+
 # Why [``http``](https://golang.org/pkg/net/http/) Standard Library?
 A general popular opinion in web-development is to use a web-development framework for build web application - *why reinvent the wheel?*
 
@@ -28,7 +46,6 @@ I have used (and am using) [``go-chi``](https://github.com/go-chi/chi) and [``fi
 2. You will need to know the basics of Golang. I am assuming you've finished learning about how Golang works and you are looking to learn how to start coding a webserver for a API restful purposes.
 
 # Requirements - What are we building?
-## a. Features
 Let's build a web-application which allows users to handle time-series data. The user can do the following:
 
 * Create a new time-series datum
@@ -37,15 +54,9 @@ Let's build a web-application which allows users to handle time-series data. The
 * Update a single timer-series datum
 * Delete a single time-series datum
 
-## b. Third Party Libraries
-For this article, nothing!
-
-## c. Coding Style
-We will run the `gofmt` application on this code repository.
-
-## d. Branding / Name / Etc
-
 The name of our application will be called ``mulberry`` and it will exist in a code repository ``mulberry-server``.
+
+And remember, for this article, we cannot use any framework!
 
 # Design - How will it work?
 
@@ -97,6 +108,16 @@ We should be able to run the following console commands:
 go run main.go
 ```
 
+## d. Coding Style
+
+We will run the `gofmt` application on this code repository.
+
+At the end of the project, please be sure to run:
+
+```bash
+$ go fmt $HOME/go/src/github.com/bartmika/mulberry-server/...
+```
+
 # Implementation - Let's build our code!
 ## a. Project Location
 Start in your default Golang home folder:
@@ -135,7 +156,7 @@ After running the above code your repository should look like this:
    📄go.md
 ```
 
-## c. Start with the Project Scaffolding
+## d. Start with the Project Scaffolding
 
 Before we write any API related functionality, let's structure our code with a good base to build from. The scaffolding we use is based on the "model-view-controller" pattern; in addition, the structure is my *opinion* and should not be considered *the standard* but rather the way I would write.
 
@@ -275,7 +296,7 @@ Copy and paste the above code to confirm no compilation errors. Study the code. 
 2. If we want to add another *api* then we create a file in the ``mulberry-server/internal/api`` folder and update the ``api.go`` file with our new URL routes.
 3. The ``internal`` folder means anything inside of it cannot be called from other Golang code, in essence all our code is *private*. Some developers move the "models" folder in a ``pkg`` folder to make the code accessible outside the package - this is a good idea when you are building microservices.
 
-## d. Start with the API Scaffolding
+## e. Start with the API Scaffolding
 
 Since we've never used the ``net/http`` standard library, let's write some prototype code that we can learn and play around with. The following code is used for learning purposes; afterwords, in a different tutorial, we will replace the code with real code using a database, etc.
 
@@ -456,7 +477,7 @@ $ SERVERPORT=5656 go run cmd/serve.go;
 
 If you see a message saying the server started then congratulations, you have setup the project scaffolding!
 
-## e. Make an API call
+## f. Make an API call
 
 Before you begin, please install the [``httpie``](https://httpie.io/) application. Once installed, please run the following code to confirm we can make an API call:
 
@@ -477,7 +498,7 @@ Date: Fri, 29 Jan 2021 05:03:22 GMT
 Mulberry Server v1.0
 ```
 
-## f. Implement our remaining API endpoints
+## g. Implement our remaining API endpoints
 
 Before we begin, you have to be aware of an issue, the issue is that the std ``net/http`` does not add any support for **URL Arguments** such as ``/api/v1/time-series-datum/:uuid``. As a result, Golang developers are torn between using a third-party package, structuring your API endpoints differently, or writing your own custom router.
 
