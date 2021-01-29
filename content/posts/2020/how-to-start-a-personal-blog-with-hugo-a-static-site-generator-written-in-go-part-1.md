@@ -6,7 +6,7 @@ draft: false
 categories:
 - "development"
 tags:
-- "go"
+- "golang"
 - "static site generator"
 - "hugo"
 - "static site"

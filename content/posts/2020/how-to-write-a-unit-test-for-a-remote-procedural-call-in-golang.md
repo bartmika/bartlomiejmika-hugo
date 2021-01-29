@@ -5,7 +5,6 @@ draft: false
 categories:
 - "development"
 tags:
-- "go"
 - "golang"
 - "rpc"
 - "unit testing"

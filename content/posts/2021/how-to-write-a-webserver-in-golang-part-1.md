@@ -4,11 +4,10 @@ subtitle: "Learn how to setup the project scaffolding using the standard library
 date: 2021-01-25T00:02:30-04:00
 draft: false
 categories:
-- "go"
+- "development"
 tags:
 - "golang"
 - "api"
-- "webdev"
 ---
 
 ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)
