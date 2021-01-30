@@ -33,6 +33,7 @@ The purpose of this article is to provide instructions on how to setup a simple 
     - Part 3: Enter the ``net/http`` standard library
 * Testing - Verify the code works
 * Implement remaining API endpoints
+* Graceful Shutdown
 * Final Thoughts - What's next?
 
 # Why [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
@@ -540,6 +541,82 @@ $ http delete 127.0.0.1:5000/api/v1/time-series-datum/xxx
 ```
 
 If you got a ``200 OK`` response with some-sort of string message, then congratulations! You have implemented your server using only the ``net/http`` standard library.
+
+# Graceful Shutdown
+
+Update the **main.go** file with the following content to support graceful shutdowns of our webserver.
+
+```go
+// github.com/bartmika/mulberry-server/cmd/serve/main.go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+    "net/http"
+    "os"
+    "os/signal"
+	"syscall"
+	"time"
+
+    sqldb "github.com/bartmika/mulberry-server/pkg/db"
+    "github.com/bartmika/mulberry-server/internal/repositories"
+    "github.com/bartmika/mulberry-server/internal/controllers"
+)
+
+func main() {
+    db := sqldb.ConnectDB() //TODO: Implement in the future.
+
+    userRepo := repositories.NewUserRepo(db)
+
+    c := controllers.NewBaseHandler(userRepo)
+
+    router := http.NewServeMux()
+    router.HandleFunc("/", c.HandleRequests)
+
+	srv := &http.Server{
+		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
+        Handler: router,
+	}
+
+    done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+    go runMainRuntimeLoop(srv)
+
+	log.Print("Server Started")
+
+	// Run the main loop blocking code.
+	<-done
+
+    stopMainRuntimeLoop(srv)
+}
+
+func runMainRuntimeLoop(srv *http.Server) {
+    if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+        log.Fatalf("listen: %s\n", err)
+    }
+}
+
+func stopMainRuntimeLoop(srv *http.Server) {
+    log.Printf("Starting graceful shutdown now...")
+
+    // Execute the graceful shutdown sub-routine which will terminate any
+	// active connections and reject any new connections.
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer func() {
+		// extra handling here
+		cancel()
+	}()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+    log.Printf("Graceful shutdown finished.")
+    log.Print("Server Exited")
+}
+```
 
 # Final Thoughts - What's next?
 
