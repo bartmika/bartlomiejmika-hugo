@@ -17,26 +17,25 @@ The purpose of this article is to provide instructions on how to setup a simple 
 <!--more-->
 
 # Table of Contents
-* Why [``http``](https://golang.org/pkg/net/http/) Standard Library?
+* Why the [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
 * What do I need?
 * Requirements - What are we building?
 * Design - How will it work?
-  - a. Project Structure
-  - b. API Endpoints
-  - c. Command Console
-  - d. Coding Style
-  - e. Datastructure
+  - Project Structure
+  - API Endpoints
 * Implementation - Let's build our code!
-  - a. Project Location
-  - b. Code repository
-  - c. Golang Modules
-  - d. Project Scaffolding
-  - e. API Scaffolding
+  - 1. Project Location
+  - 2. Code repository
+  - 3. Golang Modules
+  - 4. Project Scaffolding
+    - Part 1: Data Layer
+    - Part 2: Application Layer
+    - Part 3: Enter the ``net/http`` standard library
 * Testing - Verify the code works
 * Implement remaining API endpoints
 * Final Thoughts - What's next?
 
-# Why [``http``](https://golang.org/pkg/net/http/) Standard Library?
+# Why [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
 A general popular opinion in web-development is to use a web-development framework for build web application - *why reinvent the wheel?*
 
 However in Golang, this general popular opinion is not held firm. The standard library is the core package provided by Golang is sufficient for all our web application needs.
@@ -62,8 +61,8 @@ And remember, for this article, we cannot use any framework!
 
 # Design - How will it work?
 
-## a. Project Structure
-In Golang, there is no official project structure; as a result, the onus is on the developer to structure a correct project hierarchy. A popular solution developers choose is the [following convention](https://github.com/golang-standards/project-layout). Our application's structure will look as follows:
+### Project Structure
+In Golang, there is no official project structure; as a result, the onus is on the developer to structure a correct project hierarchy. A popular solution developers choose is the [following convention](https://github.com/golang-standards/project-layout). Our application's initial structure will look as follows (and will grow with time!):
 
 ```
 📦mulberry-server
@@ -71,21 +70,28 @@ In Golang, there is no official project structure; as a result, the onus is on t
 │   📄Makefile
 │
 └───📁cmd
-|      📄serve.go
+│   |
+|   └───📁serve
+|       📄main.go
 │
 └───📁internal
-    │
-    └───📁api
-    │      📄api.go
-    │
-    └───📁manager
-    │      📄manager.go
-    │
+|   │
+|   └───📁controllers
+|   │      📄controller.go
+|   |
+|   └───📁repositories
+|          📄user.go
+|
+└───📁pkg
+    |
+    └───📁db
+    |   📄db.go
+    |
     └───📁models
-           📄model.go
+        📄user.go
 ```
 
-## b. API Endpoints
+### API Endpoints
 
 We will have the following API endpoints:
 
@@ -102,48 +108,8 @@ We will have the following API endpoints:
 |--------------------------------------------------------------------------------
 ```
 
-## c. Command Console
-
-We should be able to run the following console commands:
-
-```bash
-go run main.go
-```
-
-## d. Coding Style
-
-We will run the `gofmt` application on this code repository.
-
-At the end of the project, please be sure to run:
-
-```bash
-$ go fmt $HOME/go/src/github.com/bartmika/mulberry-server/...
-```
-
-## e. Datastructure
-
-Our app will work with time-series data.
-
-{{< highlight golang "linenos=false">}}
-// models.go
-
-type User struct {
-    //TODO: We will implement in another article!
-}
-
-type TimeSeriesDatum struct {
-    Uuid         string
-    InstrumentId uint64
-    Value        float64
-    Timestamp    time.Time
-    UserId       uint64
-}
-{{</ highlight >}}
-
-Please note, we won't be implementing the datastructure in this article.
-
 # Implementation - Let's build our code!
-## a. Project Location
+## 1. Project Location
 Start in your default Golang home folder:
 
 ```bash
@@ -155,16 +121,20 @@ Please note:
 * Replace ``bartmika`` with your username on [GitHub](https://github.com).
 * If that folder does not exist, please create it now.
 
-## b. Code repository
-Create a new code repository called ``mulberry-server`` and run the following code:
+## 2. Code repository
+Create a new code repository called ``mulberry-server`` and clone your code repository:
 
 ```bash
 $ git clone https://github.com/bartmika/mulberry-server.git
 $ cd mulberry-server
 ```
 
-## c. Golang Modules
-Since we are using Golang ``modules`` please follow these steps to get started:
+Please note:
+
+* Replace ``bartmika`` with your username on [GitHub](https://github.com).
+
+## 3. Golang Modules
+Since we are using Golang *modules* please follow these steps to get started:
 
 ```bash
 $ go mod init github.com/bartmika/mulberry-server
@@ -174,274 +144,217 @@ $ go mod tidy
 
 After running the above code your repository should look like this:
 
-
 ```
 📦mulberry-server
    📄go.md
 ```
 
-## d. Project Scaffolding
+## 4. Project Scaffolding
 
-Before we write any API related functionality, let's structure our code with a good base to build from. The scaffolding we use is based on the "model-view-controller" pattern; in addition, the structure is my *opinion* and should not be considered *the standard* but rather the way I would write.
+Before we write any API related functionality, let's structure our code with a good base to build from. The scaffolding we use is based on the "model-view-controller" pattern; in addition, the structure is my *opinion* and should not be considered *the standard*.
 
-Begin with our ``serve.go`` file with the following contents:
+Start by creating the folders and the files inside each folder.
+
+### Part 1: Data Layer
+
+We will structure our data layer according to **Approach 3: Repository Interface per Model** as mentioned in [this article](https://archive.is/XxqyT).
+
+Begin with our **db.go** file which we will implement in a future article:
 
 {{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/cmd/serve.go
-package main
+// github.com/bartmika/mulberry-server/pkg/db/db.go
+package db
 
 import (
-    "log"
-    // "net/http"
-    "os"
-    "os/signal"
-    "syscall"
-
-    "github.com/bartmika/mulberry-server/internal/manager"
+    "database/sql"
 )
 
-func main() {
-    manager, initErr := manager.NewManager()
-    if initErr != nil {
-        log.Fatalf("NewManager error: %s\n", initErr)
-    }
-
-    // Integrate this program with the signal handler provided by the operating
-    // system through the go routine.
-    done := make(chan os.Signal, 1)
-    signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-    // Create a new go routine which will become our main runtime loop because
-    // we will halt this current main runtime loop with a go channel.
-    go func() {
-        log.Println("Server running.")
-        if execErr := manager.RunMainRuntimeLoop(); execErr != nil {
-            log.Fatalf("main error: %s\n", execErr)
-        }
-    }()
-
-    // Halt the main runtime loop until the program receives a shutdown signal.
-    <-done
-
-    // Execute the graceful shutdown sub-routine which will terminate any
-    // active connections and reject any new connections.
-    manager.StopMainRuntimeLoop()
+func ConnectDB() *sql.DB {
+    return &sql.DB{} //TODO: Implement in future.
 }
 {{</ highlight >}}
 
-Study the code and you should take away the following benefits:
-
-* Core application logic is handled someplace else, so our currently file makes use of the easy-to-use functions.
-* We integrate with the OS to handle termination commands so our application *gracefully shuts down* when terminated.
-
-Next we need to create our application manager which is in essence the *controller*. This file will be responsible for starting up and managing the (a) database and (b) API.
+Next we will create a sample **user.go** file with the structure we can use in the **models** package. Please note, we are putting this file in the **pkg** folder in case we want to use this file in the future in another project.
 
 {{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/internal/manager/manager.go
-package manager
-
-import (
-    "log"
-)
-
-type Manager struct {
-    //TODO: api
-    //TODO: database
-}
-
-func NewManager() (*Manager, error) {
-    //TODO: Database initialization code.
-    // ...
-
-    //TODO: API handler initialization code.
-    // ...
-
-    //TODO: Server initialization code.
-    // ...
-
-    //TODO: Save to our struct.
-    return &Manager{}, nil
-}
-
-func (m *Manager) RunMainRuntimeLoop() error {
-    //TODO
-    return nil
-}
-
-func (m *Manager) StopMainRuntimeLoop() error {
-    log.Println("Starting graceful shutdown")
-
-    //TODO
-
-    log.Println("Finished gaceful shutdown")
-    return nil
-}
-{{</ highlight >}}
-
-Next we'll create an ``APIServer`` structure. All our API functions will be methods belonging to this struct. This section can be considered both the *view* and *controller*.
-
-{{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/internal/api/api.go
-package api
-
-type APIServer struct {
-    //TODO: Implement properties
-}
-
-func NewAPIServer () (*APIServer, error) {
-    return nil, nil
-}
-
-//TODO: Implement functions
-{{</ highlight >}}
-
-And finally the *model* layer, we will create the ``Store`` structure so all our database methods will be utilizing it.
-
-{{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/internal/models/models.go
+// github.com/bartmika/mulberry-server/pkg/models/user.go
 package models
 
-type Store struct {
-    //TODO: Implement properties.
+type User struct {
+    Name string //TODO: Will fill out in the future.
 }
 
-func NewStore() (*Store) {
-    return &Store{
-        //TODO: Finish...
-    }
+type UserRepository interface {
+    FindByID(ID int) (*User, error)
+    Save(user *User) error
+    //TODO: Will fill out in the future.
 }
-
-//TODO: Implement functions.
 {{</ highlight >}}
 
-Copy and paste the above code to confirm no compilation errors. Study the code. Notice the following key points:
-
-1. If we want to add a new *model* then we create a file in the ``mulberry-server/internal/models`` folder. For example: "user.go" would be created and all the methods would be using the ``Store`` struct as the pointer receiver.
-2. If we want to add another *api* then we create a file in the ``mulberry-server/internal/api`` folder and update the ``api.go`` file with our new URL routes.
-3. The ``internal`` folder means anything inside of it cannot be called from other Golang code, in essence all our code is *private*. Some developers move the "models" folder in a ``pkg`` folder to make the code accessible outside the package - this is a good idea when you are building microservices.
-
-## e. API Scaffolding
-
-Since we've never used the ``net/http`` standard library, let's write some prototype code that we can learn and play around with. The following code is used for learning purposes; afterwords, in a different tutorial, we will replace the code with real code using a database, etc.
-
-Let us learn how to create our first API endpoint, the ``/api/v1/version`` URL path which supports ``GET`` requests.
-
-To begin, we need to update ``manager.go`` as follows:
+Now we will implement the **repositories** package which is responsible for storing *structs* and their implementation of the interfaces in the **models** package. Remember once a struct has implemented all the required methods of an interface, then we can call those methods on them; as a result, this makes testing much easier.
 
 {{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/internal/manager/manager.go
-package manager
+// github.com/bartmika/mulberry-server/internal/respositories/user.go
+package repositories
 
 import (
-    "log"      // STEP 1: Import the following...
-    "net/http" // (1)
-    "os"       // (2)
-    "context"  // (3)
-    "time"     // (4)
+    "database/sql"
 
-    "github.com/bartmika/mulberry-server/internal/api"
+    "github.com/bartmika/mulberry-server/pkg/models"
 )
 
-type Manager struct {
-    // STEP 2: Our manager will handle the following...
-    server *http.Server
-    //TODO: database field in the future...
+// UserRepo implements models.UserRepository
+type UserRepo struct {
+    db *sql.DB
 }
 
-func NewManager() (*Manager, error) {
-    //TODO: Database initialization.
-    // ...
-
-    // STEP 3: Initialize our API handler.
-    as, err := api.NewAPIServer() //TODO: Integrate with the database in the future.
-    if err != nil {
-        log.Fatal(err)
+func NewUserRepo(db *sql.DB) *UserRepo {
+    return &UserRepo{
+        db: db,
     }
-
-    // STEP 4: Initialize our router.
-    router := http.NewServeMux()
-
-    // STEP 5: Define URL paths that the `RouteHandler` will handle.
-    router.HandleFunc("/", as.HandleRequests)
-
-    port := os.Getenv("SERVERPORT")
-    if port == "" {
-        log.Fatal("Not specified the port.")
-    }
-
-    // STEP 6: Initialize the server instance that will run the specified
-    //         port for the specified routes.
-    srv := &http.Server{
-		Addr:    "localhost:"+port,
-		Handler: router,
-	}
-
-    // STEP 7: Finally initialize our struct which will manage these services.
-    return &Manager{
-        server: srv, // Step 4
-    }, nil
 }
 
-func (m *Manager) RunMainRuntimeLoop() error {
-    // STEP 8
-    if err := m.server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-        return err
-    }
-    return nil
+func (r *UserRepo) FindByID(ID int) (*models.User, error) {
+    return &models.User{}, nil //TODO: Implement in the future.
 }
 
-func (m *Manager) StopMainRuntimeLoop() error {
-    log.Println("Starting graceful shutdown")
-
-    // STEP 9
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer func() {
-		//TODO: Database shutdown code in the future...
-        // . . .
-
-		cancel()
-	}()
-	if err := m.server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server Shutdown Failed:%+v", err)
-	}
-
-    log.Println("Finished gaceful shutdown")
-    return nil
+// Save ..
+func (r *UserRepo) Save(user *models.User) error {
+    return nil //TODO: Implement in the future.
 }
 {{</ highlight >}}
 
-Next we need to update the API as follows:
+### Part 2: Application Layer
+
+This is how the **main.go** file will look like.
 
 {{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/internal/api/api.go
-package api
+// github.com/bartmika/mulberry-server/cmd/serve/main.go
+package main
 
 import (
     "fmt"
     "net/http"
+
+    sqldb "github.com/bartmika/mulberry-server/pkg/db"
+    "github.com/bartmika/mulberry-server/internal/repositories"
+    "github.com/bartmika/mulberry-server/internal/controllers"
 )
 
-type APIServer struct {
-    //TODO: Implement properties
-}
+func main() {
+    db := sqldb.ConnectDB() //TODO: Implement in the future.
 
-func NewAPIServer () (*APIServer, error) {
-    return nil, nil
-}
+    userRepo := repositories.NewUserRepo(db)
 
-func (as *APIServer) RouteHandler(w http.ResponseWriter, req *http.Request) {
-    if req.URL.Path == "/api/v1/version" {
-        if req.Method == http.MethodGet {
-            as.getVersionHandler(w, req)
-            return
-        }
+    c := controllers.NewBaseHandler(userRepo)
+
+    router := http.NewServeMux()
+    router.HandleFunc("/", c.HandleRequests)
+
+	s := &http.Server{
+        Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
+        Handler: router,
     }
 
-    //TODO: Implement more functions...
+    if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+        panic(err)
+    }
+}
+{{</ highlight >}}
 
-    // DEVELOPERS NOTE:
-    // PLEASE NOTE WE WILL BE IMPLEMENTING THE API ENDPOINTS OF OUR APP IN THE FUTURE:
+And the **controller.go** file looks like this:
+
+{{< highlight golang "linenos=false">}}
+// github.com/bartmika/mulberry-server/internal/controllers/controller.go
+package controllers
+
+import (
+    "net/http"
+
+    "github.com/bartmika/mulberry-server/internal/repositories"
+)
+
+type BaseHandler struct {
+    UserRepo *repositories.UserRepo
+}
+
+func NewBaseHandler(u *repositories.UserRepo) (*BaseHandler) {
+    return &BaseHandler{
+        UserRepo: u,
+    }
+}
+
+func (h *BaseHandler) HandleRequests(w http.ResponseWriter, req *http.Request) {
+    //TODO: Implement in the future
     //--------------------------------------------------------------------------------
+    // GET     | /api/v1/version                   | Get the application version    |
+    // GET     | /api/v1/time-series-data          | List all the time-series data  |
+    // GET     | /api/v1/time-series-data          | List all the time-series data  |
+    // POST    | /api/v1/time-series-data          | Create a time-series datum     |
+    // GET     | /api/v1/time-series-datum/<uuid>  | Get the details of a datum     |
+    // PUT     | /api/v1/time-series-datum/<uuid>  | Update a single datum          |
+    // DELETE  | /api/v1/time-series-datum/<uuid>  | Delete a single datum          |
+    //--------------------------------------------------------------------------------
+    return
+}
+{{</ highlight >}}
+
+That's it, we've structured our project which will grow nicely.
+
+* Every time you want to add a new entity, you create a file in the *models*, *repositories* package and then write the API endpoint in the *controllers* package.
+* If you want to swap the database from *mysql* to *postgres* then you can update the *db.go* file and everything works fine.
+
+### Part 3: Enter the ``net/http`` standard library
+
+Let us learn how to create our first API endpoint and then call it. We will be implementing the ``/api/v1/version`` URL path which supports *GET* requests.
+
+Create a new file called **version.go** with the contents of:
+
+{{< highlight golang "linenos=false">}}
+// github.com/bartmika/mulberry-server/internal/controllers/version.go
+package controllers
+
+import (
+    "net/http"
+)
+
+func (h *BaseHandler) getVersion(w http.ResponseWriter, req *http.Request) {
+    w.Header().Set("Content-Type", "application/json")
+    w.Write([]byte("Mulberry Server v1.0"))
+}
+{{</ highlight >}}
+
+Next update the **controller.go** with the following:
+
+{{< highlight golang "linenos=false">}}
+// github.com/bartmika/mulberry-server/internal/controllers/controller.go
+package controllers
+
+import (
+    "net/http"
+
+    "github.com/bartmika/mulberry-server/internal/repositories"
+)
+
+type BaseHandler struct {
+    UserRepo *repositories.UserRepo
+}
+
+func NewBaseHandler(u *repositories.UserRepo) (*BaseHandler) {
+    return &BaseHandler{
+        UserRepo: u,
+    }
+}
+
+func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
+    if r.URL.Path == "/api/v1/version" {
+        h.getVersion(w, r)
+        return
+    }
+    //TODO: Implement in the future
+    //--------------------------------------------------------------------------------
+    // GET     | /api/v1/version                   | Get the application version    |
+    // GET     | /api/v1/time-series-data          | List all the time-series data  |
     // GET     | /api/v1/time-series-data          | List all the time-series data  |
     // POST    | /api/v1/time-series-data          | Create a time-series datum     |
     // GET     | /api/v1/time-series-datum/<uuid>  | Get the details of a datum     |
@@ -449,54 +362,15 @@ func (as *APIServer) RouteHandler(w http.ResponseWriter, req *http.Request) {
     // DELETE  | /api/v1/time-series-datum/<uuid>  | Delete a single datum          |
     //--------------------------------------------------------------------------------
 
-    http.Error(w, fmt.Sprintf("Unexpected method and URL path`, got %v", req.Method), http.StatusMethodNotAllowed)
+    http.NotFound(w, r)
     return
 }
 {{</ highlight >}}
 
-And finally we will need to create a new file called ``version_api.go`` with the contents of:
-
-{{< highlight golang "linenos=false">}}
-// github.com/bartmika/mulberry-server/internal/api/version_api.go
-package api
-
-import (
-    "net/http"
-)
-
-func (as *APIServer) getVersionHandler(w http.ResponseWriter, req *http.Request) {
-    w.Header().Set("Content-Type", "application/json")
-    w.Write([]byte("Mulberry Server v1.0"))
-}
-{{</ highlight >}}
-
-In summary the project hierarchy should look as follows:
-
-```
-📦mulberry-server
-│   📄README.md
-│   📄Makefile
-│
-└───📁cmd
-|      📄serve.go
-│
-└───📁internal
-    │
-    └───📁api
-    │      📄api.go
-    │      📄version_api.go
-    │
-    └───📁manager
-    │      📄manager.go
-    │
-    └───📁models
-           📄model.go
-```
-
 Finally start the server and confirm everything works:
 
 ```bash
-$ SERVERPORT=5656 go run cmd/serve.go;
+$ SERVERPORT=5000 go run cmd/serve.go;
 ```
 
 If you see a message saying the server started then congratulations, you have setup the project scaffolding!
@@ -506,14 +380,14 @@ If you see a message saying the server started then congratulations, you have se
 Before you begin, please install the [``httpie``](https://httpie.io/) application. Once installed, please run the following code to confirm we can make an API call:
 
 ```bash
-$ http get 127.0.0.1:5656/api/v1/version
+$ http get 127.0.0.1:5000/api/v1/version
 ```
 
 If you get a result somewhat similar like this, then condradulations!
 
 ```
 Last login: Thu Jan 28 00:10:01 on ttys015
-bmika@MACMINI-AFA2131 mulberry-server % http get 127.0.0.1:5656/api/v1/version
+bmika@MACMINI-AFA2131 mulberry-server % http get 127.0.0.1:5000/api/v1/version
 HTTP/1.1 200 OK
 Content-Length: 6
 Content-Type: application/json
@@ -534,7 +408,7 @@ For more on this topic, please see the following links:
 
 Given these options, what should we do? From the beginners perspective, the [split switch](https://benhoyt.com/writings/go-routing/#split-switch) seems like the easiest to do, in addition it's quite performant with the cost of slightly ugly looking code.
 
-Before we begin, make sure your project hierarchy should look as follows by creating the ``tsd_api.go`` file in your project:
+Before we begin, make sure your project hierarchy look as follows by creating the **tsd.go** file:
 
 ```
 📦mulberry-server
@@ -542,43 +416,84 @@ Before we begin, make sure your project hierarchy should look as follows by crea
 │   📄Makefile
 │
 └───📁cmd
-|      📄serve.go
+│   |
+|   └───📁serve
+|       📄main.go
 │
 └───📁internal
-    │
-    └───📁api
-    │      📄api.go
-    │      📄tsd_api.go
-    │      📄version_api.go
-    │
-    └───📁manager
-    │      📄manager.go
-    │
+|   │
+|   └───📁controllers
+|   │      📄controller.go
+|   |      📄version.go
+|   |      📄tsd.go
+|   |
+|   └───📁repositories
+|          📄user.go
+|
+└───📁pkg
+    |
+    └───📁db
+    |   📄db.go
+    |
     └───📁models
-           📄model.go
+        📄user.go
 ```
 
-Therefore, the code will look like this:
+Please fill the **tsd.go** file with the following contents:
 
 {{< highlight golang "linenos=false">}}
-// FILE LOCATION: github.com/bartmika/mulberry-server/internal/api/api.go
-package api
+// FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/tsd.go
+package controllers
 
 import (
-    "fmt"
-    "strings"
     "net/http"
 )
 
-type APIServer struct {
-    //TODO: Implement properties
+func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("TODO: List Time Series Data")) //TODO: IMPLEMENT.
 }
 
-func NewAPIServer () (*APIServer, error) {
-    return nil, nil //TODO: Implement
+func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, req *http.Request) {
+    w.Write([]byte("TODO: Create Series Data")) //TODO: IMPLEMENT.
 }
 
-func (as *APIServer) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+    w.Write([]byte("TODO: Get Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
+}
+
+func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+    w.Write([]byte("TODO: Update Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
+}
+
+func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+    w.Write([]byte("TODO: Delete Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
+}
+{{</ highlight >}}
+
+And then update the **controller.go** file:
+
+{{< highlight golang "linenos=false">}}
+// github.com/bartmika/mulberry-server/internal/controllers/controller.go
+package controllers
+
+import (
+    "net/http"
+    "strings"
+
+    "github.com/bartmika/mulberry-server/internal/repositories"
+)
+
+type BaseHandler struct {
+    UserRepo *repositories.UserRepo
+}
+
+func NewBaseHandler(u *repositories.UserRepo) (*BaseHandler) {
+    return &BaseHandler{
+        UserRepo: u,
+    }
+}
+
+func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     // Split path into slash-separated parts, for example, path "/foo/bar"
@@ -591,77 +506,46 @@ func (as *APIServer) HandleRequests(w http.ResponseWriter, r *http.Request) {
 
     switch {
     case n == 1 && p[0] == "version" && r.Method == http.MethodGet:
-        as.getVersionHandler(w, r)
+        h.getVersion(w, r)
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodGet:
-        as.getTimeSeriesDataHandler(w, r)
+        h.getTimeSeriesData(w, r)
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodPost:
-        as.postTimeSeriesDatumHandler(w, r)
+        h.postTimeSeriesData(w, r)
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodGet:
-        as.getTimeSeriesDatumHandler(w, r, p[1])
+        h.getTimeSeriesDatum(w, r, p[1])
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodPut:
-        as.putTimeSeriesDatumHandler(w, r, p[1])
+        h.putTimeSeriesDatum(w, r, p[1])
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodDelete:
-        as.deleteTimeSeriesDatumHandler(w, r, p[1])
+        h.deleteTimeSeriesDatum(w, r, p[1])
     default:
         http.NotFound(w, r)
     }
 }
 {{</ highlight >}}
 
-And
-
-{{< highlight golang "linenos=false">}}
-// FILE LOCATION: github.com/bartmika/mulberry-server/internal/api/tsd_api.go
-package api
-
-import (
-    "net/http"
-)
-
-func (as *APIServer) getTimeSeriesDataHandler(w http.ResponseWriter, req *http.Request) {
-    w.Write([]byte("TODO: List Time Series Data")) //TODO: IMPLEMENT.
-}
-
-func (as *APIServer) postTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request) {
-    w.Write([]byte("TODO: Create Series Data")) //TODO: IMPLEMENT.
-}
-
-func (as *APIServer) getTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request, uuid string) {
-    w.Write([]byte("TODO: Get Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
-}
-
-func (as *APIServer) putTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request, uuid string) {
-    w.Write([]byte("TODO: Update Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
-}
-
-func (as *APIServer) deleteTimeSeriesDatumHandler(w http.ResponseWriter, req *http.Request, uuid string) {
-    w.Write([]byte("TODO: Delete Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
-}
-{{</ highlight >}}
-
-## Testing
-
 And finally to test out making API calls, we have the following commands you can run in your console.
 
 ```bash
-$ http get 127.0.0.1:5656/api/v1/version
+$ http get 127.0.0.1:5000/api/v1/version
 
-$ http get 127.0.0.1:4112/api/v1/time-series-data
+$ http get 127.0.0.1:5000/api/v1/time-series-data
 
-$ http post 127.0.0.1:4112/api/v1/time-series-data instrument_id="1" timestamp="2021-01-01"
+$ http post 127.0.0.1:5000/api/v1/time-series-data instrument_id="1" timestamp="2021-01-01"
 
-$ http get 127.0.0.1:4112/api/v1/time-series-datum/xxx
+$ http get 127.0.0.1:5000/api/v1/time-series-datum/xxx
 
-$ http put 127.0.0.1:4112/api/v1/time-series-datum/xxx instrument_id="1" timestamp="2021-01-02"
+$ http put 127.0.0.1:5000/api/v1/time-series-datum/xxx instrument_id="1" timestamp="2021-01-02"
 
-$ http delete 127.0.0.1:4112/api/v1/time-series-datum/xxx
+$ http delete 127.0.0.1:5000/api/v1/time-series-datum/xxx
 ```
+
+If you got a ``200 OK`` response with some-sort of string message, then congratulations! You have implemented your server using only the ``net/http`` standard library.
 
 # Final Thoughts - What's next?
 
 That's it! We have ourselves a basic API web-app. We have dipped our feat on the shores of the ocean of Golang web-development and the water feels welcoming. Moving forward we'll need to cover more topics such as:
 
-* How do we read ``post``/``put`` requests? How do we write responses?
+* How do we read the body of a request? How do we write responses?
 * How do we handle using a database?
 * How do we handle login and authenticated API endpoints?
 * How do we handle sessions?
