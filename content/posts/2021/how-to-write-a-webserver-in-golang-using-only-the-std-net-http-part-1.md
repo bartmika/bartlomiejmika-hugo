@@ -251,7 +251,7 @@ func main() {
     router := http.NewServeMux()
     router.HandleFunc("/", c.HandleRequests)
 
-	s := &http.Server{
+    s := &http.Server{
         Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
         Handler: router,
     }
