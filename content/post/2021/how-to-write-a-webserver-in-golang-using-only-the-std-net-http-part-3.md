@@ -16,7 +16,7 @@ The purpose of this article is to provide instructions on how to setup *postgres
 
 <!--more-->
 
-Just as a reminder this is part 3 of the series, you'll need to finish [part 2](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-1/) before continuing.
+Just as a reminder this is part 3 of the series, you'll need to finish [part 2](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-2/) before continuing.
 
 # Database Setup
 
