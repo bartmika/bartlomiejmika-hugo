@@ -70,7 +70,11 @@ The project structure will remain the same as from [part 2](/posts/2021/how-to-w
 4. mulberry-server/internal/respositories/user.go
 5. mulberry-server/internal/respositories/tsd.go
 
+## Models Package
+
 Let's begin rewriting the data layer by starting in the **db.go** file. Please note we will be utilizing a third-party library for handling communication with the **postgres** database.
+
+### db.go
 
 {{< highlight go "linenos=true">}}
 package db
@@ -103,7 +107,7 @@ func ConnectDB(databaseHost, databasePort, databaseUser, databasePassword, datab
 }
 {{</ highlight >}}
 
-Next we will update the **user.go** file in the **models** package.
+### user.go
 
 {{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/models/user.go
@@ -155,7 +159,7 @@ type LoginResponse struct {
 }
 {{</ highlight >}}
 
-And the **tsd.go** file under the **models** package:
+### tsd.go
 
 {{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/models/tsd.go
@@ -206,7 +210,10 @@ type TimeSeriesDatumPutRequest struct {
 }
 {{</ highlight >}}
 
+## Repositories Package
 Now we will move to the **repositories** package and start with the **user.go** file:
+
+### user.go
 
 {{< highlight go "linenos=true">}}
 package repositories
@@ -323,7 +330,7 @@ func (r *UserRepo) Save(ctx context.Context, m *models.User) error {
 }
 {{</ highlight >}}
 
-And in the **tsd.go** file in the **repositories** package is:
+### tsd.go
 
 {{< highlight go "linenos=true">}}
 package repositories
@@ -508,7 +515,11 @@ We need to update the **controllers** package to support [contexts](https://gola
 2. mulberry-server/internal/controllers/tsd.go
 3. mulberry-server/cmd/serve/main.go
 
+## Controllers Package
+
 Begin with the **user.go** file:
+
+### user.go
 
 {{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/user.go
@@ -631,7 +642,7 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
 // b. https://stackoverflow.com/questions/21197239/decoding-json-using-json-unmarshal-vs-json-newdecoder-decode
 {{</ highlight >}}
 
-Then with the **tsd.go** file:
+### tsd.go
 
 {{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/tsd.go
@@ -779,7 +790,11 @@ func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Reque
 }
 {{</ highlight >}}
 
+## Main Package
+
 And finally with the **main.go** file:
+
+### main.go
 
 {{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/cmd/serve/main.go
