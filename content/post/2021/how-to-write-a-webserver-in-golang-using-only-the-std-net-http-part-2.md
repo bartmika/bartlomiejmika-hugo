@@ -18,7 +18,7 @@ The purpose of this article is to provide instructions on how to read body of *r
 
 Let's begin on how to architect the data layer in our app. For beginners, working with a database is a little overwhelming - let's try setting up a project with a [a Simple JSON Database in Golang — Scribble](https://medium.com/@skdomino/scribble-a-tiny-json-database-in-golang-9817854deb05) and then in a later article replace it for something more standard used.
 
-Just as a reminder this is part 2 of the series, you'll need to finish [part 2](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-1/) before continuing.
+Just as a reminder this is part 2 of the series, you'll need to finish [part 1](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-1/) before continuing.
 
 # How to Integrate with a Database
 
@@ -1140,3 +1140,5 @@ Woh, that's a lot! Hopefully this article was helpful for you. We still have the
 * How do we handle sessions? Access tokens?
 * How do we handle background processes?
 * How do we handle pagination in our list API endpoint?
+
+Let's go to [**part 3**](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-3/)!
