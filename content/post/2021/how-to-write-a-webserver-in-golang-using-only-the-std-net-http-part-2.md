@@ -10,7 +10,7 @@ tags:
 - "api"
 ---
 
-![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)
+<!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
 
 The purpose of this article is to provide instructions on how to read body of *request* and use a *primitive database*.
 
@@ -28,7 +28,7 @@ We will structure our data layer according to **Approach 3: Repository Interface
 
 We will start with the following project structure. Three new packages will be introduced: **repository**, **db** and **models**.
 
-```
+{{< highlight bash "linenos=false">}}
 📦mulberry-server
 │   📄README.md
 │   📄Makefile
@@ -59,7 +59,7 @@ We will start with the following project structure. Three new packages will be i
     |
     └───📁utils
         📄password.go
-```
+{{</ highlight >}}
 
 More details as follows:
 
@@ -71,13 +71,13 @@ More details as follows:
 
 Begin by installing the dependency with running this code. For more information go ahead and review the [Scribble](https://github.com/sdomino/scribble) third-party library.
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ go get github.com/sdomino/scribble
-```
+{{</ highlight >}}
 
 The **db.go** file will be implemented as follows:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 package db
 
 import (
@@ -101,7 +101,7 @@ func ConnectDB() (*scribble.Driver, error) {
 
 Next we will create a sample **user.go** file with the structure we can use in the **models** package. Please note, we are putting this file in the **pkg** folder in case we want to use this file in the future in another project. If you don't know what the **pkg** is then please read about it [here](https://stackoverflow.com/questions/47369621/what-is-the-use-of-pkg-directory-in-go#:~:text=The%20pkg%20directory%20contains%20Go,that%20object%20into%20many%20executables.).
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=table">}}
 // github.com/bartmika/mulberry-server/internal/models/user.go
 package models
 
@@ -124,7 +124,7 @@ type UserRepository interface {
 
 Now we will implement the **repositories** package which is responsible for storing *structs* and their implementation of the interfaces in the **models** package. Remember once a struct has implemented all the required methods of an interface, then we can call those methods on them; as a result, this makes testing much easier.
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=table">}}
 // github.com/bartmika/mulberry-server/internal/repositories/user.go
 package repositories
 
@@ -195,7 +195,7 @@ func (r *UserRepo) Save(user *models.User) error {
 
 Update the **main.go** file, notice the **NEW** comments to help see what we changed different.
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=table">}}
 // github.com/bartmika/mulberry-server/cmd/serve/main.go
 package main
 
@@ -278,7 +278,7 @@ The first important note to take is that we want our API endpoints to *only* acc
 
 We must store the request and response data format in our **models** package. Here is the changes we made:
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/models/user.go
 package models
 
@@ -321,11 +321,11 @@ type LoginRequest struct {
 type LoginResponse struct {
     AccessToken string    `json:"access_token"`
 }
-```
+{{</ highlight >}}
 
 Next we'll need to handle hashing passwords, create the **password.go** file with the following contents:
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/pkg/utils/password.go
 package utils
 
@@ -345,11 +345,11 @@ func CheckPasswordHash(password, hash string) bool {
     err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
     return err == nil
 }
-```
+{{</ highlight >}}
 
 Next let's utilize the *Encode* and *Decode* functions. Our **user.go** file will look as follows:
 
-```go
+{{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/user.go
 package controllers
 
@@ -459,7 +459,7 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
 // [1][2]: Learned from:
 // a. https://blog.golang.org/json
 // b. https://stackoverflow.com/questions/21197239/decoding-json-using-json-unmarshal-vs-json-newdecoder-decode
-```
+{{</ highlight >}}
 
 With the above code there are few items to note:
 
@@ -471,15 +471,15 @@ With the above code there are few items to note:
 
 Let's attempt to *register*. Start the server and run the following commands in your console:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http post 127.0.0.1:5000/api/v1/register email="fherbert@dune.com" \
                                         password="the-spice-must-flow" \
                                             name="Frank Herbert"
-```
+{{</ highlight >}}
 
 The output should be as follows:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 59
 Content-Type: application/json
@@ -488,12 +488,12 @@ Date: Sat, 30 Jan 2021 20:22:48 GMT
 {
     "message": "You have successfully registered an account."
 }
-```
+{{</ highlight >}}
 
 ### Register with Failure
 Now if you rerun the same command you will see our validation successfully works:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 400 Bad Request
 Content-Length: 20
 Content-Type: text/plain; charset=utf-8
@@ -501,19 +501,19 @@ Date: Sat, 30 Jan 2021 20:23:42 GMT
 X-Content-Type-Options: nosniff
 
 Email already exists
-```
+{{</ highlight >}}
 
 ### Login with Failure (1 of 2)
 Next let's try to *login*. Run the following in your console to test out the *Email does not exist* validation:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http post 127.0.0.1:5000/api/v1/login email="patreides@dune.com" \
                                      password="house-of-the-atreides"
-```
+{{</ highlight >}}
 
 We should see an output something like:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 400 Bad Request
 Content-Length: 21
 Content-Type: text/plain; charset=utf-8
@@ -521,19 +521,19 @@ Date: Sat, 30 Jan 2021 20:29:10 GMT
 X-Content-Type-Options: nosniff
 
 Email does not exist
-```
+{{</ highlight >}}
 
 ### Login with Failure (2 of 2)
 Next let's verify our invalid password validation works:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" \
                                      password="house-of-harkonnen"
-```
+{{</ highlight >}}
 
 With the following output:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 400 Bad Request
 Content-Length: 19
 Content-Type: text/plain; charset=utf-8
@@ -541,20 +541,20 @@ Date: Sat, 30 Jan 2021 20:31:08 GMT
 X-Content-Type-Options: nosniff
 
 Incorrect password
-```
+{{</ highlight >}}
 
 ### Login with Success
 
 And for our grand finally, run the login command which works:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" \
                                      password="the-spice-must-flow"
-```
+{{</ highlight >}}
 
 Wonderful! The success output will be as follows:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 79
 Content-Type: application/json
@@ -563,7 +563,8 @@ Date: Sat, 30 Jan 2021 20:35:02 GMT
 {
     "access_token": "TODO: WE WILL FIGURE OUT HOW TO DO THIS IN ANOTHER ARTICLE!"
 }
-```
+{{</ highlight >}}
+
 Please note that we will discuss **access tokens** and **user authentication** in another article. For now we will only return this placeholder message.
 
 # More code - Time-Series Data
@@ -579,7 +580,7 @@ Let us implement our *time-series datum* data-structure in our application. Reme
 
 Start by create our **tsd.go** file in the **models** package:
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/models/tsd.go
 package models
 
@@ -625,11 +626,12 @@ type TimeSeriesDatumPutRequest struct {
     Timestamp time.Time `json:"timestamp"`
     UserUuid string `json:"user_uuid"`
 }
-```
+{{</ highlight >}}
 
 Next we need to write the **tsd.go** file inside our **repositories** package:
 
-```
+{{< highlight go "linenos=true">}}
+// github.com/bartmika/mulberry-server/internal/repositories/tsd.go
 package repositories
 
 import (
@@ -723,13 +725,13 @@ func (r *TimeSeriesDatumRepo) Save(tsd *models.TimeSeriesDatum) error {
 	}
 	return nil
 }
-```
+{{</ highlight >}}
 
 ## Application Layer
 
 Update our **controller.go** to look as follows:
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/controllers/controller.go
 package controllers
 
@@ -784,11 +786,11 @@ func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
         http.NotFound(w, r)
     }
 }
-```
+{{</ highlight >}}
 
 And finally update the **main.go** to support our new data-structure.
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/cmd/serve/main.go
 package main
 
@@ -862,13 +864,13 @@ func stopMainRuntimeLoop(srv *http.Server) {
     log.Printf("Graceful shutdown finished.")
     log.Print("Server Exited")
 }
-```
+{{</ highlight >}}
 
 ## Utilizing in our API Endpoints
 
 Update our **tsd.go** file as follows:
 
-```go
+{{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/tsd.go
 package controllers
 
@@ -996,7 +998,7 @@ func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Req
     }
     w.WriteHeader(http.StatusOK) // Note: https://tools.ietf.org/html/rfc7231#section-6.3.1
 }
-```
+{{</ highlight >}}
 
 ## Making API calls
 
@@ -1006,16 +1008,16 @@ Let's begin by making a post. Please note that the *timestamp* must be formatted
 
 Run the following in your console:
 
-```bash
+{{< highlight go "linenos=false">}}
 $ http post 127.0.0.1:5000/api/v1/time-series-data instrument_uuid="lalala" \
                                                              value="123" \
                                                          timestamp="2021-01-30T10:20:10.000Z" \
                                                          user_uuid="bababa"
-```
+{{</ highlight >}}
 
 And you should get the following message:
 
-```bash
+{{< highlight go "linenos=false">}}
 HTTP/1.1 201 Created
 Content-Length: 145
 Content-Type: application/json
@@ -1028,19 +1030,19 @@ Date: Sat, 30 Jan 2021 22:36:44 GMT
     "uuid": "8ca9c245-9b48-44ce-b3bf-5b6262deb92f",
     "value": "123"
 }
-```
+{{</ highlight >}}
 
 ## List with Success
 
 Run the following in your console:
 
-```bash
+{{< highlight go "linenos=false">}}
 $ http get 127.0.0.1:5000/api/v1/time-series-data
-```
+{{</ highlight >}}
 
 And you should get the following message:
 
-```bash
+{{< highlight go "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 145
 Content-Type: application/json
@@ -1055,19 +1057,19 @@ Date: Sat, 30 Jan 2021 22:37:27 GMT
         "value": 123
     }
 ]
-```
+{{</ highlight >}}
 
 ## Retrieve with Success
 
 Run the following in your console:
 
-```bash
+{{< highlight go "linenos=false">}}
 $ http get 127.0.0.1:5000/api/v1/time-series-datum/8ca9c245-9b48-44ce-b3bf-5b6262deb92f
-```
+{{</ highlight >}}
 
 And you should get the following message:
 
-```bash
+{{< highlight go "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 143
 Content-Type: application/json
@@ -1080,23 +1082,23 @@ Date: Sat, 30 Jan 2021 22:39:04 GMT
     "uuid": "8ca9c245-9b48-44ce-b3bf-5b6262deb92f",
     "value": 123
 }
-```
+{{</ highlight >}}
 
 ## Update with Success
 
 Run the following in your console:
 
-```bash
+{{< highlight go "linenos=false">}}
 $ http put 127.0.0.1:5000/api/v1/time-series-datum/8ca9c245-9b48-44ce-b3bf-5b6262deb92f \
 instrument_uuid="lalala" \
           value="321" \
       timestamp="2021-01-30T10:20:10.000Z" \
       user_uuid="bababa"
-```
+{{</ highlight >}}
 
 And you should get the following message:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 143
 Content-Type: application/json
@@ -1109,26 +1111,26 @@ Date: Sat, 30 Jan 2021 22:42:41 GMT
     "uuid": "8ca9c245-9b48-44ce-b3bf-5b6262deb92f",
     "value": 321
 }
-```
+{{</ highlight >}}
 
 ## Delete with Success
 
 Run the following in your console:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http delete 127.0.0.1:5000/api/v1/time-series-datum/8ca9c245-9b48-44ce-b3bf-5b6262deb92f
-```
+{{</ highlight >}}
 
 And you should get the following message:
 
-```bash
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 0
 Content-Type: application/json
 Date: Sat, 30 Jan 2021 22:43:32 GMT
 
 
-```
+{{</ highlight >}}
 
 # Final Thoughts - What's next?
 

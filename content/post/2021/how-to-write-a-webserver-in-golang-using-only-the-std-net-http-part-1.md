@@ -10,28 +10,11 @@ tags:
 - "api"
 ---
 
-![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)
+<!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
 
 The purpose of this article is to provide instructions on how to setup a simple RESTful API server, in Golang, using the standard library and not any other third-party web framework. You will know how to create REST endpoints within your project that can handle **POST**, **GET**, **PUT** and **DELETE** HTTP requests.
 
 <!--more-->
-
-# Table of Contents
-* Why the [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
-* What do I need?
-* Requirements - What are we building?
-* Design - How will it work?
-  - Project Structure
-  - API Endpoints
-* Implementation - Let's build our code!
-  - 1. Project Location
-  - 2. Code repository
-  - 3. Golang Modules
-  - 4. Project Scaffolding
-* Testing - Verify the code works
-* Implement remaining API endpoints
-* Graceful Shutdown
-* Final Thoughts - What's next?
 
 # Why [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
 A general popular opinion in web-development is to use a web-development framework for build web application - *why reinvent the wheel?*
@@ -62,7 +45,7 @@ And remember, for this article, we cannot use any framework!
 ### Project Structure
 In Golang, there is no official project structure; as a result, the onus is on the developer to structure a correct project hierarchy. A popular solution developers choose is the [following convention](https://github.com/golang-standards/project-layout). Our application's initial structure will look as follows (and will grow with time!):
 
-```
+{{< highlight bash "linenos=false">}}
 📦mulberry-server
 │   📄README.md
 │   📄Makefile
@@ -76,13 +59,13 @@ In Golang, there is no official project structure; as a result, the onus is on t
     │
     └───📁controllers
         📄controller.go
-```
+{{</ highlight >}}
 
 ### API Endpoints
 
 We will have the following API endpoints:
 
-```text
+{{< highlight bash "linenos=false">}}
 |--------------------------------------------------------------------------------
 | METHOD  | URL                               | DESCRIPTION                    |
 |--------------------------------------------------------------------------------
@@ -95,15 +78,15 @@ We will have the following API endpoints:
 | PUT     | /api/v1/time-series-datum/<uuid>  | Update a single datum          |
 | DELETE  | /api/v1/time-series-datum/<uuid>  | Delete a single datum          |
 |--------------------------------------------------------------------------------
-```
+{{</ highlight >}}
 
 # Implementation - Let's build our code!
 ## 1. Project Location
 Start in your default Golang home folder:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ cd ~/go/src/github.com/bartmika
-```
+{{</ highlight >}}
 
 Please note:
 
@@ -113,10 +96,10 @@ Please note:
 ## 2. Code repository
 Create a new code repository called ``mulberry-server`` and clone your code repository:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ git clone https://github.com/bartmika/mulberry-server.git
 $ cd mulberry-server
-```
+{{</ highlight >}}
 
 Please note:
 
@@ -125,18 +108,18 @@ Please note:
 ## 3. Golang Modules
 Since we are using Golang *modules* please follow these steps to get started:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ go mod init github.com/bartmika/mulberry-server
 $ export GIT_TERMINAL_PROMPT=1
 $ go mod tidy
-```
+{{</ highlight >}}
 
 After running the above code your repository should look like this:
 
-```
+{{< highlight bash "linenos=false">}}
 📦mulberry-server
    📄go.md
-```
+{{</ highlight >}}
 
 ## 4. Project Scaffolding
 
@@ -146,7 +129,7 @@ Start by creating the folders and the files inside each folder.
 
 This is how the **main.go** file will look like.
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/cmd/serve/main.go
 package main
 
@@ -176,7 +159,7 @@ func main() {
 
 And the **controller.go** file looks like this:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/controllers/controller.go
 package controllers
 
@@ -215,7 +198,7 @@ Let us learn how to create our first API endpoint and then call it. We will be i
 
 Create a new file called **version.go** with the contents of:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/controllers/version.go
 package controllers
 
@@ -231,7 +214,7 @@ func (h *BaseHandler) getVersion(w http.ResponseWriter, req *http.Request) {
 
 Next update the **controller.go** with the following:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=table">}}
 // github.com/bartmika/mulberry-server/internal/controllers/controller.go
 package controllers
 
@@ -272,9 +255,9 @@ func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
 
 Finally start the server and confirm everything works:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ SERVERPORT=5000 go run cmd/serve.go;
-```
+{{</ highlight >}}
 
 If you see a message saying the server started then congratulations, you have setup the project scaffolding!
 
@@ -282,13 +265,13 @@ If you see a message saying the server started then congratulations, you have se
 
 Before you begin, please install the [``httpie``](https://httpie.io/) application. Once installed, please run the following code to confirm we can make an API call:
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http get 127.0.0.1:5000/api/v1/version
-```
+{{</ highlight >}}
 
 If you get a result somewhat similar like this, then condradulations!
 
-```
+{{< highlight bash "linenos=false">}}
 Last login: Thu Jan 28 00:10:01 on ttys015
 bmika@MACMINI-AFA2131 mulberry-server % http get 127.0.0.1:5000/api/v1/version
 HTTP/1.1 200 OK
@@ -297,7 +280,7 @@ Content-Type: application/json
 Date: Fri, 29 Jan 2021 05:03:22 GMT
 
 Mulberry Server v1.0
-```
+{{</ highlight >}}
 
 # Implement remaining API endpoints
 
@@ -313,7 +296,7 @@ Given these options, what should we do? From the beginners perspective, the [spl
 
 Before we begin, make sure your project hierarchy look as follows by creating the **tsd.go** file:
 
-```
+{{< highlight bash "linenos=false">}}
 📦mulberry-server
 │   📄README.md
 │   📄Makefile
@@ -330,11 +313,11 @@ Before we begin, make sure your project hierarchy look as follows by creating th
         📄version.go
         📄tsd.go
         📄user.go
-```
+{{</ highlight >}}
 
 Please fill the **tsd.go** file with the following contents:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/tsd.go
 package controllers
 
@@ -365,7 +348,7 @@ func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Req
 
 And then create the **user.go** file:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/user.go
 package controllers
 
@@ -384,7 +367,7 @@ func (h *BaseHandler) postRegister(w http.ResponseWriter, req *http.Request) {
 
 And then update the **controller.go** file:
 
-{{< highlight golang "linenos=false">}}
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/controllers/controller.go
 package controllers
 
@@ -437,7 +420,7 @@ func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
 
 And finally to test out making API calls, we have the following commands you can run in your console.
 
-```bash
+{{< highlight bash "linenos=false">}}
 $ http get 127.0.0.1:5000/api/v1/version
 
 $ http post 127.0.0.1:5000/api/v1/register email="lalal@lalal.com" password="lalalal" name="lalalalalala"
@@ -453,7 +436,7 @@ $ http get 127.0.0.1:5000/api/v1/time-series-datum/xxx
 $ http put 127.0.0.1:5000/api/v1/time-series-datum/xxx instrument_id="1" timestamp="2021-01-02"
 
 $ http delete 127.0.0.1:5000/api/v1/time-series-datum/xxx
-```
+{{</ highlight >}}
 
 If you got a ``200 OK`` response with some-sort of string message, then congratulations! You have implemented your server using only the ``net/http`` standard library.
 
@@ -461,7 +444,7 @@ If you got a ``200 OK`` response with some-sort of string message, then congratu
 
 Update the **main.go** file with the following content to support graceful shutdowns of our webserver.
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/cmd/serve/main.go
 package main
 
@@ -525,7 +508,7 @@ func stopMainRuntimeLoop(srv *http.Server) {
     log.Printf("Graceful shutdown finished.")
     log.Print("Server Exited")
 }
-```
+{{</ highlight >}}
 
 # Final Thoughts - What's next?
 
