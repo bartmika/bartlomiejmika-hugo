@@ -653,12 +653,15 @@ go run cmd/serve/main.go
 {{</ highlight >}}
 
 
+In another terminal run the following code to make a login call:
 
-
-
-```
+{{< highlight bash "linenos=false">}}
 bmika@MACMINI-AFA2131 mulberry-server % http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" password="the-spice-must-flow"
+{{</ highlight >}}
 
+The return should look as follows:
+
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 292
 Content-Type: application/json
@@ -667,21 +670,23 @@ Date: Sun, 31 Jan 2021 22:34:28 GMT
 {
     "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJjbGllbnRfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiIsImV4cCI6MTYxMjEzNDI2OCwic2Vzc2lvbl91dWlkIjoiOTk3ZDQ3NWUtNGMyZi00YWViLThlMjEtOWNlYWM3MTg3NDhjIn0.fBP01baxjC9EwO3vzeHpeRKppOkDlVYmTniZUEPXfAw"
 }
-```
+{{</ highlight >}}
 
-// Please save the output the "access_token" so you can write in your console.
-// export MULBERRY_API_TOKEN="<OUTPUT>"
+Please save the output the "access_token" so you can write in your console.
 
-Therfore
-// export MULBERRY_API_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJjbGllbnRfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiIsImV4cCI6MTYxMjEzNDI2OCwic2Vzc2lvbl91dWlkIjoiOTk3ZDQ3NWUtNGMyZi00YWViLThlMjEtOWNlYWM3MTg3NDhjIn0.fBP01baxjC9EwO3vzeHpeRKppOkDlVYmTniZUEPXfAw"
+{{< highlight bash "linenos=false">}}
+export MULBERRY_API_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJjbGllbnRfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiIsImV4cCI6MTYxMjEzNDI2OCwic2Vzc2lvbl91dWlkIjoiOTk3ZDQ3NWUtNGMyZi00YWViLThlMjEtOWNlYWM3MTg3NDhjIn0.fBP01baxjC9EwO3vzeHpeRKppOkDlVYmTniZUEPXfAw"
+{{</ highlight >}}
 
-```
+Next run the following call to a protected API:
+
+{{< highlight bash "linenos=false">}}
 http get 127.0.0.1:5000/api/v1/time-series-data Authorization:"Bearer $MULBERRY_API_TOKEN"
-```
+{{</ highlight >}}
 
+And your result should look like this:
 
-
-```
+{{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
 Content-Length: 175
 Content-Type: application/json
@@ -696,4 +701,4 @@ Date: Sun, 31 Jan 2021 22:57:40 GMT
         "value": 123
     }
 ]
-```
+{{</ highlight >}}
