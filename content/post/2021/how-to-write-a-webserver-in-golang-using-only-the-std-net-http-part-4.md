@@ -20,9 +20,51 @@ The purpose of this article is to provide instructions on how utilize sessions a
 
 Just as a reminder this is part 4 of the series, you'll need to finish [part 3](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-3/) before continuing.
 
+## Structure
+
+
+{{< highlight bash "linenos=false">}}
+📦mulberry-server
+│   📄README.md
+│   📄Makefile
+│
+└───📁cmd
+│   |
+|   └───📁serve
+|       📄main.go
+│
+└───📁internal
+|   │
+|   └───📁controllers
+|   │   📄controller.go
+|   │   📄middleware.go
+|   │   📄tsd.go
+|   │   📄user.go
+|   │   📄version.go
+|   |
+|   └───📁repositories
+|       📄tsd.go
+|       📄user.go
+|
+└───📁pkg
+    |
+    └───📁db
+    |   📄db.go
+    |
+    └───📁models
+    |   📄tsd.go
+    |   📄user.go
+    |
+    └───📁utils
+        📄jwt.go
+        📄password.go
+{{</ highlight >}}
+
+## utils package
+
 ### jwt.go
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/pkg/utils/jwt.go
 package utils
 
@@ -32,14 +74,13 @@ import (
     jwt "github.com/dgrijalva/jwt-go"
 )
 
-func GenerateJWT(hmacSecret []byte, sessionUuid string, clientUuid string) (string, error) {
+func GenerateJWT(hmacSecret []byte, clientUuid string) (string, error) {
     token := jwt.New(jwt.SigningMethodHS256)
 
     claims := token.Claims.(jwt.MapClaims)
 
     claims["authorized"] = true
-    claims["session_uuid"] = sessionUuid
-    claims["client_uuid"] = clientUuid
+    claims["user_uuid"] = clientUuid
     claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
 
     tokenString, err := token.SignedString(hmacSecret)
@@ -57,9 +98,8 @@ func ProcessJWT(hmacSecret []byte, reqToken string) (map[string]string, error){
     if err == nil && token.Valid {
         if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
             m := make(map[string]string)
-            m["session_uuid"] = claims["session_uuid"].(string)
-            m["client_uuid"] = claims["client_uuid"].(string)
-            // m["exp"] = claims["exp"]
+            m["user_uuid"] = claims["user_uuid"].(string)
+            m["exp"] = claims["exp"].(string)
             return m, nil
         } else {
             return nil, err
@@ -70,11 +110,13 @@ func ProcessJWT(hmacSecret []byte, reqToken string) (map[string]string, error){
     }
     return nil, nil
 }
-```
+{{</ highlight >}}
 
+## controllers package
 ### middleware.go
 
-```go
+{{< highlight go "linenos=true">}}
+// github.com/bartmika/mulberry-server/internal/controllers/middleware.go
 package controllers
 
 import (
@@ -129,8 +171,7 @@ func JWTProcessorMiddleware(fn http.HandlerFunc) http.HandlerFunc {
             m, err := utils.ProcessJWT(mySigningKey, reqToken)
             if err == nil {
                 ctx = context.WithValue(ctx, "is_authorized", true)
-                ctx = context.WithValue(ctx, "session_uuid", m["session_uuid"])
-                ctx = context.WithValue(ctx, "client_uuid", m["client_uuid"])
+                ctx = context.WithValue(ctx, "user_uuid", m["user_uuid"])
 
                 // Flow to the next middleware with our JWT token saved.
                 fn(w, r.WithContext(ctx))
@@ -145,7 +186,7 @@ func JWTProcessorMiddleware(fn http.HandlerFunc) http.HandlerFunc {
     }
 }
 
-func Middleware(fn http.HandlerFunc) http.HandlerFunc {
+func ChainMiddleware(fn http.HandlerFunc) http.HandlerFunc {
     // Attach our middleware
     fn = URLProcessorMiddleware(fn)
     fn = JWTProcessorMiddleware(fn)
@@ -154,97 +195,11 @@ func Middleware(fn http.HandlerFunc) http.HandlerFunc {
         fn(w, r)
     }
 }
-```
-
-### main.go
-
-```go
-// github.com/bartmika/mulberry-server/cmd/serve/main.go
-package main
-
-import (
-    "context"
-    "fmt"
-    "log"
-    "net/http"
-    "os"
-    "os/signal"
-	"syscall"
-	"time"
-
-    sqldb "github.com/bartmika/mulberry-server/pkg/db"
-    "github.com/bartmika/mulberry-server/internal/repositories"
-    "github.com/bartmika/mulberry-server/internal/controllers"
-)
-
-func main() {
-    // Get our environment variables which will used to configure our application.
-    databaseHost := os.Getenv("MULBERRY_DB_HOST")
-    databasePort := os.Getenv("MULBERRY_DB_PORT")
-    databaseUser := os.Getenv("MULBERRY_DB_USER")
-    databasePassword := os.Getenv("MULBERRY_DB_PASSWORD")
-    databaseName := os.Getenv("MULBERRY_DB_NAME")
-
-    db, err := sqldb.ConnectDB(databaseHost, databasePort, databaseUser, databasePassword, databaseName)
-    if err != nil {
-        log.Fatal(err)
-    }
-    defer db.Close()
-
-    userRepo := repositories.NewUserRepo(db)
-    tsdRepo := repositories.NewTimeSeriesDatumRepo(db)
-
-    c := controllers.NewBaseHandler(userRepo, tsdRepo)
-
-    router := http.NewServeMux()
-    router.HandleFunc("/", controllers.Middleware(c.HandleRequests))
-
-	srv := &http.Server{
-		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
-	}
-
-    done := make(chan os.Signal, 1)
-	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-    go runMainRuntimeLoop(srv)
-
-	log.Print("Server Started")
-
-	// Run the main loop blocking code.
-	<-done
-
-    stopMainRuntimeLoop(srv)
-}
-
-func runMainRuntimeLoop(srv *http.Server) {
-    if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-        log.Fatalf("listen: %s\n", err)
-    }
-}
-
-func stopMainRuntimeLoop(srv *http.Server) {
-    log.Printf("Starting graceful shutdown now...")
-
-    // Execute the graceful shutdown sub-routine which will terminate any
-	// active connections and reject any new connections.
-    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer func() {
-		// extra handling here
-		cancel()
-	}()
-
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Server Shutdown Failed:%+v", err)
-	}
-    log.Printf("Graceful shutdown finished.")
-    log.Print("Server Exited")
-}
-```
+{{</ highlight >}}
 
 ### controller.go
 
-```go
+{{< highlight go "linenos=true">}}
 // github.com/bartmika/mulberry-server/internal/controllers/controller.go
 package controllers
 
@@ -318,17 +273,17 @@ func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
         http.NotFound(w, r)
     }
 }
-```
+{{</ highlight >}}
 
 ### user.go
 
-```go
+{{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/user.go
 package controllers
 
 import (
     "encoding/json"
-    "fmt"
+    // "fmt"
     "net/http"
 
     "github.com/google/uuid"
@@ -353,10 +308,10 @@ func (h *BaseHandler) postRegister(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // For debugging purposes, print our output so you can see the code working.
-    fmt.Println(requestData.Name)
-    fmt.Println(requestData.Email)
-    fmt.Println(requestData.Password)
+    // // For debugging purposes, print our output so you can see the code working.
+    // fmt.Println(requestData.Name)
+    // fmt.Println(requestData.Email)
+    // fmt.Println(requestData.Password)
 
     // Lookup the email and if it is not unique we need to generate a `400 Bad Request` response.
     if userFound, _ := h.UserRepo.FindByEmail(ctx, requestData.Email); userFound != nil {
@@ -383,7 +338,6 @@ func (h *BaseHandler) postRegister(w http.ResponseWriter, r *http.Request) {
     // Generate our response.
     responseData := models.RegisterResponse{
         Message: "You have successfully registered an account.",
-        Uuid: uid,
     }
     if err := json.NewEncoder(w).Encode(&responseData); err != nil {  // [2]
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -404,9 +358,9 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // For debugging purposes, print our output so you can see the code working.
-    fmt.Println(requestData.Email)
-    fmt.Println(requestData.Password)
+    // // For debugging purposes, print our output so you can see the code working.
+    // fmt.Println(requestData.Email)
+    // fmt.Println(requestData.Password)
 
     // Lookup the user in our database, else return a `400 Bad Request` error.
     user, err := h.UserRepo.FindByEmail(ctx, requestData.Email)
@@ -426,12 +380,9 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Generate a `UUID` for our session.
-    uid := uuid.New().String()
-
     // Generate our JWT token.
     mySigningKey := ctx.Value("jwt_signing_key").([]byte)
-    accessToken, err := utils.GenerateJWT(mySigningKey, uid, user.Uuid)
+    accessToken, err := utils.GenerateJWT(mySigningKey, user.Uuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -451,11 +402,11 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
 // [1][2]: Learned from:
 // a. https://blog.golang.org/json
 // b. https://stackoverflow.com/questions/21197239/decoding-json-using-json-unmarshal-vs-json-newdecoder-decode
-```
+{{</ highlight >}}
 
 ### tsd.go
 
-```go
+{{< highlight go "linenos=true">}}
 // FILE LOCATION: github.com/bartmika/mulberry-server/internal/controllers/tsd.go
 package controllers
 
@@ -473,7 +424,7 @@ import (
 // $ http get 127.0.0.1:5000/api/v1/time-series-data
 func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
-    userUuid := ctx.Value("client_uuid").(string)
+    userUuid := ctx.Value("user_uuid").(string)
 
     results, err := h.TsdRepo.FilterByUserUuid(ctx, userUuid)
     if err != nil {
@@ -492,7 +443,7 @@ func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, r *http.Request) 
 // $ http post 127.0.0.1:5000/api/v1/time-series-data instrument_uuid="lalala" value="123" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
 func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
-    userUuid := ctx.Value("client_uuid").(string)
+    userUuid := ctx.Value("user_uuid").(string)
 
     var requestData models.TimeSeriesDatumCreateRequest
     if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
@@ -536,7 +487,7 @@ func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, r *http.Request)
 // $ http get 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
 func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
     ctx := r.Context()
-    userUuid := ctx.Value("client_uuid").(string)
+    userUuid := ctx.Value("user_uuid").(string)
 
     // Lookup our record.
     tsd, err := h.TsdRepo.FindByUuid(ctx, uuid)
@@ -562,7 +513,7 @@ func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request,
 // $ http put 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569 instrument_uuid="lalala" value="321" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
 func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
-    userUuid := ctx.Value("client_uuid").(string)
+    userUuid := ctx.Value("user_uuid").(string)
 
     // Lookup our record and enforce account access.
     tsd, err := h.TsdRepo.FindByUuid(ctx, uid)
@@ -613,7 +564,7 @@ func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request,
 // $ http delete 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
 func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
-    userUuid := ctx.Value("client_uuid").(string)
+    userUuid := ctx.Value("user_uuid").(string)
 
     // Lookup our record and enforce account access.
     tsd, err := h.TsdRepo.FindByUuid(ctx, uid)
@@ -631,7 +582,95 @@ func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Reque
     }
     w.WriteHeader(http.StatusOK) // Note: https://tools.ietf.org/html/rfc7231#section-6.3.1
 }
-```
+{{</ highlight >}}
+
+## serve package
+
+### main.go
+
+{{< highlight go "linenos=true">}}
+// github.com/bartmika/mulberry-server/cmd/serve/main.go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+    "net/http"
+    "os"
+    "os/signal"
+	"syscall"
+	"time"
+
+    sqldb "github.com/bartmika/mulberry-server/pkg/db"
+    "github.com/bartmika/mulberry-server/internal/repositories"
+    "github.com/bartmika/mulberry-server/internal/controllers"
+)
+
+func main() {
+    // Get our environment variables which will used to configure our application.
+    databaseHost := os.Getenv("MULBERRY_DB_HOST")
+    databasePort := os.Getenv("MULBERRY_DB_PORT")
+    databaseUser := os.Getenv("MULBERRY_DB_USER")
+    databasePassword := os.Getenv("MULBERRY_DB_PASSWORD")
+    databaseName := os.Getenv("MULBERRY_DB_NAME")
+
+    db, err := sqldb.ConnectDB(databaseHost, databasePort, databaseUser, databasePassword, databaseName)
+    if err != nil {
+        log.Fatal(err)
+    }
+    defer db.Close()
+
+    userRepo := repositories.NewUserRepo(db)
+    tsdRepo := repositories.NewTimeSeriesDatumRepo(db)
+
+    c := controllers.NewBaseHandler(userRepo, tsdRepo)
+
+    router := http.NewServeMux()
+    router.HandleFunc("/", controllers.ChainMiddleware(c.HandleRequests))
+
+	srv := &http.Server{
+		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
+        Handler: router,
+	}
+
+    done := make(chan os.Signal, 1)
+	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+    go runMainRuntimeLoop(srv)
+
+	log.Print("Server Started")
+
+	// Run the main loop blocking code.
+	<-done
+
+    stopMainRuntimeLoop(srv)
+}
+
+func runMainRuntimeLoop(srv *http.Server) {
+    if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+        log.Fatalf("listen: %s\n", err)
+    }
+}
+
+func stopMainRuntimeLoop(srv *http.Server) {
+    log.Printf("Starting graceful shutdown now...")
+
+    // Execute the graceful shutdown sub-routine which will terminate any
+	// active connections and reject any new connections.
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer func() {
+		// extra handling here
+		cancel()
+	}()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+    log.Printf("Graceful shutdown finished.")
+    log.Print("Server Exited")
+}
+{{</ highlight >}}
 
 # Testing
 ## Starting the Server
