@@ -60,6 +60,70 @@ Just as a reminder this is part 4 of the series, you'll need to finish [part 3](
         📄password.go
 {{</ highlight >}}
 
+## models package
+
+### user.go
+
+{{< highlight go "linenos=true">}}
+// github.com/bartmika/mulberry-server/internal/models/user.go
+package models
+
+import (
+	"context"
+)
+
+// The definition of the user record we will saving in our database.
+type User struct {
+	Uuid string          `json:"uuid"`
+	Name string          `json:"name"`
+	Email string         `json:"email"`
+	PasswordHash string  `json:"password_hash"`
+}
+
+// The interface that *must* be implemented.
+type UserRepository interface {
+	Create(ctx context.Context, uuid string, name string, email string, passwordHash string) error
+	FindByUuid(ctx context.Context, uuid string) (*User, error)
+	FindByEmail(ctx context.Context, email string) (*User, error)
+	Save(ctx context.Context, user *User) error
+}
+
+// The struct used to represent the user's `register` POST request data.
+type RegisterRequest struct {
+	Name string     `json:"name"`
+	Email string    `json:"email"`
+	Password string `json:"password"`
+}
+
+// The struct used to represent the system's response when the `register` POST request was a success.
+type RegisterResponse struct {
+	Message string `json:"message"`
+}
+
+// The struct used to represent the user's `login` POST request data.
+type LoginRequest struct {
+	Email string    `json:"email"`
+	Password string `json:"password"`
+}
+
+// The struct used to represent the system's response when the `login` POST request was a success.
+type LoginResponse struct {
+	AccessToken string `json:"access_token"`
+    RefreshToken string `json:"refresh_token"`
+}
+
+// The struct used to represent the user's `refresh token` POST request data.
+type RefreshTokenRequest struct {
+	Value string     `json:"value"`
+}
+
+// The struct used to represent the system's response when the `refresh token` POST request was a success.
+type RefreshTokenResponse struct {
+	AccessToken string `json:"access_token"`
+    RefreshToken string `json:"refresh_token"`
+}
+{{</ highlight >}}
+
 ## utils package
 
 ### jwt.go
@@ -74,41 +138,56 @@ import (
     jwt "github.com/dgrijalva/jwt-go"
 )
 
-func GenerateJWT(hmacSecret []byte, clientUuid string) (string, error) {
+// Generate the `access token` and `refresh token` for the secret key.
+func GenerateJWTTokenPair(hmacSecret []byte, clientUuid string) (string, string, error) {
+    //
+    // Generate token.
+    //
     token := jwt.New(jwt.SigningMethodHS256)
-
     claims := token.Claims.(jwt.MapClaims)
-
-    claims["authorized"] = true
     claims["user_uuid"] = clientUuid
-    claims["exp"] = time.Now().Add(time.Minute * 30).Unix()
+    claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 
     tokenString, err := token.SignedString(hmacSecret)
-
     if err != nil {
-        return "", err
+        return "", "", err
     }
-    return tokenString, nil
+
+    //
+    // Generate refresh token.
+    //
+    refreshToken := jwt.New(jwt.SigningMethodHS256)
+	rtClaims := refreshToken.Claims.(jwt.MapClaims)
+	rtClaims["user_uuid"] = clientUuid
+	rtClaims["exp"] = time.Now().Add(time.Hour * 72).Unix()
+
+	refreshTokenString, err := refreshToken.SignedString(hmacSecret)
+	if err != nil {
+		return "", "", err
+	}
+
+    return tokenString, refreshTokenString, nil
 }
 
-func ProcessJWT(hmacSecret []byte, reqToken string) (map[string]string, error){
+// Validates either the `access token` or `refresh token` and returns either the
+// `user_uuid` if success or error on failure.
+func ProcessJWTToken(hmacSecret []byte, reqToken string) (string, error){
     token, err := jwt.Parse(reqToken, func(t *jwt.Token) (interface{}, error) {
         return hmacSecret, nil
     })
     if err == nil && token.Valid {
         if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-            m := make(map[string]string)
-            m["user_uuid"] = claims["user_uuid"].(string)
-            m["exp"] = claims["exp"].(string)
-            return m, nil
+            user_uuid := claims["user_uuid"].(string)
+            // m["exp"] := string(claims["exp"].(float64))
+            return user_uuid, nil
         } else {
-            return nil, err
+            return "", err
         }
 
     } else {
-        return nil, err
+        return "", err
     }
-    return nil, nil
+    return "", nil
 }
 {{</ highlight >}}
 
@@ -168,10 +247,10 @@ func JWTProcessorMiddleware(fn http.HandlerFunc) http.HandlerFunc {
 
             // log.Println(reqToken) // For debugging purposes only.
 
-            m, err := utils.ProcessJWT(mySigningKey, reqToken)
+            user_uuid, err := utils.ProcessJWTToken(mySigningKey, reqToken)
             if err == nil {
                 ctx = context.WithValue(ctx, "is_authorized", true)
-                ctx = context.WithValue(ctx, "user_uuid", m["user_uuid"])
+                ctx = context.WithValue(ctx, "user_uuid", user_uuid)
 
                 // Flow to the next middleware with our JWT token saved.
                 fn(w, r.WithContext(ctx))
@@ -239,35 +318,37 @@ func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
         h.postLogin(w, r)
     case n == 1 && p[0] == "register" && r.Method == http.MethodPost:
         h.postRegister(w, r)
+    case n == 1 && p[0] == "refresh-token" && r.Method == http.MethodPost:
+        h.postRefreshToken(w, r)
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodGet:
         if isAuthorized {
             h.getTimeSeriesData(w, r)
         } else {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodPost:
         if isAuthorized {
             h.postTimeSeriesData(w, r)
         } else {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodGet:
         if isAuthorized {
             h.getTimeSeriesDatum(w, r, p[1])
         } else {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodPut:
         if isAuthorized {
             h.putTimeSeriesDatum(w, r, p[1])
         } else {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodDelete:
         if isAuthorized {
             h.deleteTimeSeriesDatum(w, r, p[1])
         } else {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
+            http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     default:
         http.NotFound(w, r)
@@ -283,7 +364,7 @@ package controllers
 
 import (
     "encoding/json"
-    // "fmt"
+    "log"
     "net/http"
 
     "github.com/google/uuid"
@@ -382,7 +463,7 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
 
     // Generate our JWT token.
     mySigningKey := ctx.Value("jwt_signing_key").([]byte)
-    accessToken, err := utils.GenerateJWT(mySigningKey, user.Uuid)
+    accessToken, refreshToken, err := utils.GenerateJWTTokenPair(mySigningKey, user.Uuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -391,6 +472,49 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
     // Finally return success.
     responseData := models.LoginResponse{
         AccessToken: accessToken,
+        RefreshToken: refreshToken,
+    }
+    if err := json.NewEncoder(w).Encode(&responseData); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+}
+
+// To run this API, try running in your console:
+// $ http post 127.0.0.1:5000/api/v1/refresh-token value="xxx"
+func (h *BaseHandler) postRefreshToken(w http.ResponseWriter, r *http.Request) {
+    var requestData models.RefreshTokenRequest
+
+    err := json.NewDecoder(r.Body).Decode(&requestData)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusBadRequest)
+        return
+    }
+
+    // // For debugging purposes, print our output so you can see the code working.
+    log.Println(requestData.Value)
+
+    ctx := r.Context()
+    mySigningKey := ctx.Value("jwt_signing_key").([]byte)
+
+    // Verify our refresh token.
+    user_uuid, err := utils.ProcessJWTToken(mySigningKey, requestData.Value)
+    if err != nil {
+        http.Error(w, "Unauthorized - refresh token expired or invalid", http.StatusUnauthorized)
+        return
+    }
+
+    // Generate our JWT token.
+    accessToken, refreshToken, err := utils.GenerateJWTTokenPair(mySigningKey, user_uuid)
+    if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
+
+    // Finally return success.
+    responseData := models.RefreshTokenResponse{
+        AccessToken: accessToken,
+        RefreshToken: refreshToken,
     }
     if err := json.NewEncoder(w).Encode(&responseData); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -702,19 +826,19 @@ The return should look as follows:
 
 {{< highlight bash "linenos=false">}}
 HTTP/1.1 200 OK
-Content-Length: 292
+Content-Length: 385
 Content-Type: application/json
-Date: Sun, 31 Jan 2021 22:34:28 GMT
-
+Date: Mon, 01 Feb 2021 04:27:46 GMT
 {
-    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJjbGllbnRfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiIsImV4cCI6MTYxMjEzNDI2OCwic2Vzc2lvbl91dWlkIjoiOTk3ZDQ3NWUtNGMyZi00YWViLThlMjEtOWNlYWM3MTg3NDhjIn0.fBP01baxjC9EwO3vzeHpeRKppOkDlVYmTniZUEPXfAw"
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTIxNTcyNjYsInVzZXJfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiJ9.ZKe5DargCrHZcAQQ71M46uUr0TWk9UYkiURijaKBABA",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTI0MTI4NjYsInVzZXJfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiJ9.odXNQd1hm3cLPI9_e2jfjYXjgjf7wfxQ8hCx3-qqZYY"
 }
 {{</ highlight >}}
 
 Please save the output the "access_token" so you can write in your console.
 
 {{< highlight bash "linenos=false">}}
-export MULBERRY_API_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJjbGllbnRfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiIsImV4cCI6MTYxMjEzNDI2OCwic2Vzc2lvbl91dWlkIjoiOTk3ZDQ3NWUtNGMyZi00YWViLThlMjEtOWNlYWM3MTg3NDhjIn0.fBP01baxjC9EwO3vzeHpeRKppOkDlVYmTniZUEPXfAw"
+export MULBERRY_API_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTIxNTcyNjYsInVzZXJfdXVpZCI6IjlkZDJjYzBhLTkzNGQtNDc4OC04MzA0LTFlMGI4MmQ5YjZlNiJ9.ZKe5DargCrHZcAQQ71M46uUr0TWk9UYkiURijaKBABA"
 {{</ highlight >}}
 
 Next run the following call to a protected API:
@@ -730,7 +854,6 @@ HTTP/1.1 200 OK
 Content-Length: 175
 Content-Type: application/json
 Date: Sun, 31 Jan 2021 22:57:40 GMT
-
 [
     {
         "instrument_uuid": "lalala",
