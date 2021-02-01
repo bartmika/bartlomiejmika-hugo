@@ -4,12 +4,13 @@ subtitle: "Learn how to build and install Hugo from source code"
 date: 2020-09-09T22:11:07-04:00
 draft: false
 categories:
-- "development"
+- "Web Development"
 tags:
-- "golang"
-- "static site generator"
-- "hugo"
-- "static site"
+- "Golang"
+- "Static Site Generator"
+- "Hugo"
+- "Static Site"
+- "HOWTO"
 ---
 
 The purpose of this article is to help beginners understand how to do the [advanced install](https://github.com/gohugoio/hugo#build-and-install-the-binaries-from-source-advanced-install) of [``hugo``](https://github.com/gohugoio/hugo) static site generator (SSG).

@@ -3,14 +3,13 @@ title: "How to Setup Peercoin on Raspberry Pi for Headless Minting"
 date: 2020-07-26T12:15:15-04:00
 draft: False
 categories:
-- "devops"
+- "Developer Operations"
 tags:
-- "cryptocurrency"
-- "peercoin"
-- "raspberrypi"
-- "rpi"
-- "howto"
-- "tutorial"
+- "Cryptocurrency"
+- "Peercoin"
+- "Raspberry Pi"
+- "HOWTO"
+- "Tutorial"
 ---
 
 Would you believe you can participate in cryptocurrency production using a simple Raspberry Pi computer? No need for powerful ASIC miners! Peercoin is an interesting altcoin that has **minting** capability built-in, and minting is the ability to create new coins from the ones you already have. In this tutorial, you'll learn how to set up a dedicated Raspberry Pi computer to mint the Peercoins in your wallet.

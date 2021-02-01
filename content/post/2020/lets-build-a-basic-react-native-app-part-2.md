@@ -3,10 +3,11 @@ title: "Let's Build a Basic React Native App - Part 2"
 date: 2020-08-28T10:38:31-04:10
 draft: true
 categories:
-- "development"
+- "Native App Development"
 tags:
-- "react-native"
-- "javascript"
+- "React Native"
+- "Javascript"
+- "HOWTO"
 ---
 
 Continuing from [part 1](/posts/2020/08/28/lets-build-a-basic-react-native-app-part-1/) of our series for creating our React Native app called **"Garbage Day"**, let's learn how to add our core components, actions and styles.

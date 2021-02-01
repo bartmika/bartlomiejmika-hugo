@@ -4,9 +4,9 @@ subtitle: "An introduction to my personal site"
 date: 2020-07-11T00:02:30-04:00
 draft: false
 categories:
-- "news"
+- "News"
 tags:
-- "thoughts"
+- "Opinion"
 ---
 
 ![](https://images.pexels.com/photos/459225/pexels-photo-459225.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)

@@ -3,11 +3,10 @@ title: "How to Structure a React Project"
 date: 2020-08-28T10:38:31-04:00
 draft: true
 categories:
-- "development"
+- "Web Development"
 tags:
-- "react"
-- "react-js"
-- "javascript"
+- "React"
+- "Javascript"
 ---
 
 TODO

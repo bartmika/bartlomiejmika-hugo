@@ -3,11 +3,12 @@ title: "How to Write a Unit Test for a Remote Procedural Call in Golang"
 date: 2020-08-13T23:14:55-04:00
 draft: false
 categories:
-- "development"
+- "Programming"
 tags:
-- "golang"
-- "rpc"
-- "unit testing"
+- "Golang"
+- "RPC"
+- "Unit Testing"
+- "HOWTO"
 ---
 
 Recently I have been learning about **remote procedural calls** (RPCs) in **Golang* and realized I was unable to find an easy example on how to write a unit test for RPCs. In this post, I'll explain how I figured out a solution.

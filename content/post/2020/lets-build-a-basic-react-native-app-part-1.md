@@ -3,10 +3,11 @@ title: "Let's Build a Basic React Native App - Part 1"
 date: 2020-08-28T10:38:31-04:00
 draft: true
 categories:
-- "development"
+- "Native App Development"
 tags:
-- "react-native"
-- "javascript"
+- "React Native"
+- "Javascript"
+- "HOWTO"
 ---
 
 Let's build a simple React Native App from scratch! This post is part of a x part series detailing how to build a app called **"Garbage Day"**. The first post will discuss *installation* and *navigation*.
