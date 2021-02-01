@@ -1,6 +1,5 @@
 ---
-title: "How to write a webserver in Golang using only the std net/http - Part 1"
-subtitle: "Learn how to setup a small project and make simple GET / POST / PUT / DELETE requests using only the standard library net/http"
+title: "How to Build an API Server in Go - Part 1: Basic Server"
 date: 2021-01-25T00:02:30-04:00
 draft: false
 categories:
@@ -12,9 +11,15 @@ tags:
 
 <!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
 
-The purpose of this article is to provide instructions on how to setup a simple RESTful API server, in Golang, using the standard library and not any other third-party web framework. You will know how to create REST endpoints within your project that can handle **POST**, **GET**, **PUT** and **DELETE** HTTP requests.
+The purpose of this post is to provide instructions on how to setup a simple RESTful API server, in Golang, using only the [*net/http* package](https://golang.org/pkg/net/http/) and not any other third-party web framework. You will learn how to create REST endpoints within your project that can handle **POST**, **GET**, **PUT** and **DELETE** HTTP requests. This is the first post in a multi-post series.
 
 <!--more-->
+
+This post belongs to the following series:
+1. **How to Build an API Server in Go - Part 1: Basic Server**
+2. [How to Build an API Server in Go - Part 2: Simple Database](/post/2021/how-to-build-an-api-server-in-go-part-2-simple-database/)
+3. [How to Build an API Server in Go - Part 3: Postgres Database](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/)
+4. [How to Build an API Server in Go - Part 4: Access Control](/post/2021/how-to-build-an-api-server-in-go-part-4-access-control/)
 
 # Why [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
 A general popular opinion in web-development is to use a web-development framework for build web application - *why reinvent the wheel?*
@@ -520,4 +525,4 @@ That's it! We have ourselves a basic API web-app. We have dipped our feat on the
 * How do we handle sessions?
 * How do we handle background processes?
 
-Now onward to [**part 2**](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-2/)!
+Now onward to [**part 2**](/post/2021/how-to-build-an-api-server-in-go-part-2-simple-database/)!

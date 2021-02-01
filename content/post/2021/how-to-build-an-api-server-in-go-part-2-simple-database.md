@@ -1,6 +1,5 @@
 ---
-title: "How to write a webserver in Golang using only the std net/http - Part 2"
-subtitle: "Learn how to implement the database layer for your webserver"
+title: "How to Build an API Server in Go - Part 2: Simple Database"
 date: 2021-01-29T00:02:30-04:00
 draft: false
 categories:
@@ -8,17 +7,23 @@ categories:
 tags:
 - "golang"
 - "api"
+- "database"
 ---
 
 <!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
 
-The purpose of this article is to provide instructions on how to read body of *request* and use a *primitive database*.
+The purpose of this post is to learn how our [basic API server](/post/2021/how-to-build-an-api-server-in-go-part-1-basic-server/) can read the body of a *request*. In addition, we will learn how to use an easy-to-use *simple database* for beginners called [scribble](https://github.com/sdomino/scribble).
 
 <!--more-->
 
 Let's begin on how to architect the data layer in our app. For beginners, working with a database is a little overwhelming - let's try setting up a project with a [a Simple JSON Database in Golang — Scribble](https://medium.com/@skdomino/scribble-a-tiny-json-database-in-golang-9817854deb05) and then in a later article replace it for something more standard used.
 
-Just as a reminder this is part 2 of the series, you'll need to finish [part 1](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-1/) before continuing.
+This post belongs to the following series:
+1. [How to Build an API Server in Go - Part 1: Basic Server](/post/2021/how-to-build-an-api-server-in-go-part-1-basic-server/)
+2. **How to Build an API Server in Go - Part 2: Simple Database**
+3. [How to Build an API Server in Go - Part 3: Postgres Database](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/)
+4. [How to Build an API Server in Go - Part 4: Access Control](/post/2021/how-to-build-an-api-server-in-go-part-4-access-control/)
+
 
 # How to Integrate with a Database
 
@@ -1141,4 +1146,4 @@ Woh, that's a lot! Hopefully this article was helpful for you. We still have the
 * How do we handle background processes?
 * How do we handle pagination in our list API endpoint?
 
-Let's go to [**part 3**](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-3/)!
+Let's go to [**part 3**](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/)!

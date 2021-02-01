@@ -1,20 +1,24 @@
 ---
 title: "About"
-date: 2017-08-20T21:38:52+08:00
-lastmod: 2017-08-28T21:41:52+08:00
+date: 2021-01-20T21:38:52+08:00
+lastmod: 2021-01-28T21:41:52+08:00
 menu: "main"
 weight: 50
 
 ---
 
-Hugo is a static site engine written in Go.
+Salutations! Welcome to my personal blog.
 
+My name is Bartlomiej Mika, I am a technical consultant at [Mika Software Corporation](https://mikasoftware.com). This blog began in 2020 primarily as an outlet for technical, programming-related posts. I want to a place to document some of the things I am learning and release it to the public in hopes to save someone else the time.
 
-It makes use of a variety of open source projects including:
+What sort of topics should you expect?
 
-* [Cobra](https://github.com/spf13/cobra)
-* [Viper](https://github.com/spf13/viper)
-* [J Walter Weatherman](https://github.com/spf13/jWalterWeatherman)
-* [Cast](https://github.com/spf13/cast)
+* Programming
 
-Learn more and contribute on [GitHub](https://github.com/gohugoio).
+* Open-Source Libraries
+
+* Tutorials
+
+* My Projects
+
+* Personal thoughts about various topics and subjects

@@ -1,6 +1,5 @@
 ---
-title: "How to write a webserver in Golang using only the std net/http - Part 4"
-subtitle: "Learn how to implement the database layer for your webserver"
+title: "How to Build an API Server in Go - Part 4: Access Control"
 date: 2021-01-31T00:02:30-04:00
 draft: false
 categories:
@@ -8,15 +7,23 @@ categories:
 tags:
 - "golang"
 - "api"
+- "security"
 ---
 
 <!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
 
-The purpose of this article is to provide instructions on how utilize sessions and authentication.
+Learn how to protect API endpoints with access and refresh tokens using the third-party [jwt-go](https://github.com/dgrijalva/jwt-go) library.
 
 <!--more-->
 
-# Authentication & Authorization
+This post belongs to the following series:
+
+1. [How to Build an API Server in Go - Part 1: Basic Server](/post/2021/how-to-build-an-api-server-in-go-part-1-basic-server/)
+2. [How to Build an API Server in Go - Part 2: Simple Database](/post/2021/how-to-build-an-api-server-in-go-part-2-simple-database/)
+3. [How to Build an API Server in Go - Part 3: Postgres Database](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/)
+4. **How to Build an API Server in Go - Part 4: Access Control**
+
+# Authentication
 
 Just as a reminder this is part 4 of the series, you'll need to finish [part 3](/posts/2021/how-to-write-a-webserver-in-golang-using-only-the-std-net-http-part-3/) before continuing.
 
