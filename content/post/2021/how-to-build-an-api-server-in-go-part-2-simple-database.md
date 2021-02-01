@@ -1146,4 +1146,4 @@ Woh, that's a lot! Hopefully this article was helpful for you. We still have the
 * How do we handle background processes?
 * How do we handle pagination in our list API endpoint?
 
-Let's go to [**part 3**](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/)!
+Now onward to the next part of our series: [**Part 3: Postgres Database >>**](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/).

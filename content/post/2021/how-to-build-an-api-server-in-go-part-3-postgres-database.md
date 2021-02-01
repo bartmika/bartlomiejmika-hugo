@@ -1087,3 +1087,5 @@ That's it for this article. Hope you enjoyed it. What's next?
 * How do we handle sessions? Access tokens?
 * How do we handle background processes?
 * How do we handle pagination in our list API endpoint?
+
+Now onward to the next part of our series: [**Part 4: Access Control >>**](/post/2021/how-to-build-an-api-server-in-go-part-4-access-control/).

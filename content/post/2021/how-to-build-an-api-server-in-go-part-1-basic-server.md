@@ -525,4 +525,4 @@ That's it! We have ourselves a basic API web-app. We have dipped our feat on the
 * How do we handle sessions?
 * How do we handle background processes?
 
-Now onward to [**part 2**](/post/2021/how-to-build-an-api-server-in-go-part-2-simple-database/)!
+Now onward to the next part of our series: [**Part 2: Simple Database >>**](/post/2021/how-to-build-an-api-server-in-go-part-2-simple-database/).
