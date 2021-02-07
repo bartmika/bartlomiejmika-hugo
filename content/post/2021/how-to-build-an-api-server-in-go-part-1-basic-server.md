@@ -22,18 +22,18 @@ This post belongs to the following series:
 3. [How to Build an API Server in Go - Part 3: Postgres Database](/post/2021/how-to-build-an-api-server-in-go-part-3-postgres-database/)
 4. [How to Build an API Server in Go - Part 4: Access Control](/post/2021/how-to-build-an-api-server-in-go-part-4-access-control/)
 
-# Why [``net/http``](https://golang.org/pkg/net/http/) Standard Library?
+# Why [``net/http``](https://golang.org/pkg/net/http/) Standard Library? {#1}
 A general popular opinion in web-development is to use a web-development framework for build web application - *why reinvent the wheel?*
 
 However in Golang, this general popular opinion is not held firm. The standard library is the core package provided by Golang is sufficient for all our web application needs.
 
 I have used (and am using) [``go-chi``](https://github.com/go-chi/chi) and [``fibre``](https://github.com/gofiber/fiber) web libraries and I would highly recommend both. For this article, I want to explore what's involved with writing an application *without* any external library and only the provided [``http``](https://golang.org/pkg/net/http/) library.
 
-# What do I need?
+# What do I need? {#2}
 1. You will need Golang version 1.15+ installed on your development machine.
 2. You will need to know the basics of Golang. I am assuming you've finished learning about how Golang works and you are looking to learn how to start coding a webserver for a API restful purposes.
 
-# Requirements - What are we building?
+# Requirements - What are we building? {#3}
 Let's build a web-application which allows users to handle time-series data. The user can do the following:
 
 * Create a new time-series datum
@@ -46,9 +46,9 @@ The name of our application will be called ``mulberry`` and it will exist in a c
 
 And remember, for this article, we cannot use any framework!
 
-# Design - How will it work?
+# Design - How will it work?  {#4}
 
-### Project Structure
+## Project Structure {#4a}
 In Golang, there is no official project structure; as a result, the onus is on the developer to structure a correct project hierarchy. A popular solution developers choose is the [following convention](https://github.com/golang-standards/project-layout). Our application's initial structure will look as follows (and will grow with time!):
 
 {{< highlight bash "linenos=false">}}
@@ -67,7 +67,7 @@ In Golang, there is no official project structure; as a result, the onus is on t
         📄controller.go
 {{</ highlight >}}
 
-### API Endpoints
+## API Endpoints {#4b}
 
 We will have the following API endpoints:
 
@@ -86,8 +86,8 @@ We will have the following API endpoints:
 |--------------------------------------------------------------------------------
 {{</ highlight >}}
 
-# Implementation - Let's build our code!
-## 1. Project Location
+# Implementation - Let's build our code! {#5}
+## 1. Project Location {#5a}
 Start in your default Golang home folder:
 
 {{< highlight bash "linenos=false">}}
