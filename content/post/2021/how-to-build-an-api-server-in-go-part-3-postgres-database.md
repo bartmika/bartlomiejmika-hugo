@@ -547,7 +547,7 @@ import (
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/register email="fherbert@dune.com" password="the-spice-must-flow" name="Frank Herbert"
-func (h *BaseHandler) postRegister(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     // Initialize our array which will store all the results from the remote server.
@@ -601,7 +601,7 @@ func (h *BaseHandler) postRegister(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" password="the-spice-must-flow"
-func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     var requestData models.LoginRequest
@@ -669,7 +669,7 @@ import (
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-data
-func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     //TODO: Add filtering based on the authenticated user account. For now just list all the records.
@@ -689,7 +689,7 @@ func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, r *http.Request) 
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/time-series-data instrument_uuid="lalala" value="123" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     var requestData models.TimeSeriesDatumCreateRequest
     if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
@@ -731,7 +731,7 @@ func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, r *http.Request)
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
+func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
     ctx := r.Context()
 
     // Lookup our record.
@@ -750,7 +750,7 @@ func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request,
 
 // To run this API, try running in your console:
 // $ http put 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569 instrument_uuid="lalala" value="321" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
 
     var requestData models.TimeSeriesDatumPutRequest
@@ -789,7 +789,7 @@ func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request,
 
 // To run this API, try running in your console:
 // $ http delete 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
 
     if err := h.TsdRepo.DeleteByUuid(ctx, uid); err != nil {

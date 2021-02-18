@@ -296,19 +296,19 @@ import (
     "github.com/bartmika/mulberry-server/internal/repositories"
 )
 
-type BaseHandler struct {
+type Controller struct {
     UserRepo *repositories.UserRepo
     TsdRepo *repositories.TimeSeriesDatumRepo
 }
 
-func New(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*BaseHandler) {
-    return &BaseHandler{
+func New(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*Controller) {
+    return &Controller{
         UserRepo: u,
         TsdRepo: tsd,
     }
 }
 
-func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     // Get our URL paths which are slash-seperated.
@@ -383,7 +383,7 @@ import (
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/register email="fherbert@dune.com" password="the-spice-must-flow" name="Frank Herbert"
-func (h *BaseHandler) postRegister(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     // Initialize our array which will store all the results from the remote server.
@@ -436,7 +436,7 @@ func (h *BaseHandler) postRegister(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" password="the-spice-must-flow"
-func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     var requestData models.LoginRequest
@@ -490,7 +490,7 @@ func (h *BaseHandler) postLogin(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/refresh-token value="xxx"
-func (h *BaseHandler) postRefreshToken(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postRefreshToken(w http.ResponseWriter, r *http.Request) {
     var requestData models.RefreshTokenRequest
 
     err := json.NewDecoder(r.Body).Decode(&requestData)
@@ -554,7 +554,7 @@ import (
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-data
-func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
@@ -573,7 +573,7 @@ func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, r *http.Request) 
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/time-series-data instrument_uuid="lalala" value="123" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
@@ -617,7 +617,7 @@ func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, r *http.Request)
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
+func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
@@ -643,7 +643,7 @@ func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request,
 
 // To run this API, try running in your console:
 // $ http put 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569 instrument_uuid="lalala" value="321" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
@@ -694,7 +694,7 @@ func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request,
 
 // To run this API, try running in your console:
 // $ http delete 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 

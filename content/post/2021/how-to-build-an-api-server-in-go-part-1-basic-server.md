@@ -173,15 +173,15 @@ import (
     "net/http"
 )
 
-type BaseHandler struct {
+type Controller struct {
     //TODO: Implement in the future.
 }
 
-func New() (*BaseHandler) {
-    return &BaseHandler{}
+func New() (*Controller) {
+    return &Controller{}
 }
 
-func (h *BaseHandler) HandleRequests(w http.ResponseWriter, req *http.Request) {
+func (h *Controller) HandleRequests(w http.ResponseWriter, req *http.Request) {
     //TODO: Implement in the future
     //--------------------------------------------------------------------------------
     // GET     | /api/v1/version                   | Get the application version    |
@@ -212,7 +212,7 @@ import (
     "net/http"
 )
 
-func (h *BaseHandler) getVersion(w http.ResponseWriter, req *http.Request) {
+func (h *Controller) getVersion(w http.ResponseWriter, req *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     w.Write([]byte("Mulberry Server v1.0"))
 }
@@ -228,15 +228,15 @@ import (
     "net/http"
 )
 
-type BaseHandler struct {
+type Controller struct {
     UserRepo *repositories.UserRepo
 }
 
-func New() (*BaseHandler) {
-    return &BaseHandler{}
+func New() (*Controller) {
+    return &Controller{}
 }
 
-func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
     if r.URL.Path == "/api/v1/version" {
         h.getVersion(w, r)
         return
@@ -340,23 +340,23 @@ import (
     "net/http"
 )
 
-func (h *BaseHandler) getTimeSeriesData(w http.ResponseWriter, req *http.Request) {
+func (h *Controller) getTimeSeriesData(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: List Time Series Data")) //TODO: IMPLEMENT.
 }
 
-func (h *BaseHandler) postTimeSeriesData(w http.ResponseWriter, req *http.Request) {
+func (h *Controller) postTimeSeriesData(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: Create Series Data")) //TODO: IMPLEMENT.
 }
 
-func (h *BaseHandler) getTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
     w.Write([]byte("TODO: Get Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
 }
 
-func (h *BaseHandler) putTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
     w.Write([]byte("TODO: Update Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
 }
 
-func (h *BaseHandler) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
     w.Write([]byte("TODO: Delete Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
 }
 {{</ highlight >}}
@@ -371,11 +371,11 @@ import (
     "net/http"
 )
 
-func (h *BaseHandler) postLogin(w http.ResponseWriter, req *http.Request) {
+func (h *Controller) postLogin(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: Logging in...")) //TODO: IMPLEMENT.
 }
 
-func (h *BaseHandler) postRegister(w http.ResponseWriter, req *http.Request) {
+func (h *Controller) postRegister(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: Registering...")) //TODO: IMPLEMENT.
 }
 {{</ highlight >}}
@@ -391,15 +391,15 @@ import (
     "strings"
 )
 
-type BaseHandler struct {
+type Controller struct {
     //TODO: Implement in the future.
 }
 
-func New() (*BaseHandler) {
-    return &BaseHandler{}
+func New() (*Controller) {
+    return &Controller{}
 }
 
-func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     // Split path into slash-separated parts, for example, path "/foo/bar"
