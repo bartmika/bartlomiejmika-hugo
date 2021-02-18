@@ -841,14 +841,14 @@ func main() {
     userRepo := repositories.NewUserRepo(db)
     tsdRepo := repositories.NewTimeSeriesDatumRepo(db)
 
-    c := controllers.NewBaseHandler(userRepo, tsdRepo)
+    c := controllers.New(userRepo, tsdRepo)
 
-    router := http.NewServeMux()
-    router.HandleFunc("/", c.HandleRequests)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", c.HandleRequests)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
+        Handler: mux,
 	}
 
     done := make(chan os.Signal, 1)

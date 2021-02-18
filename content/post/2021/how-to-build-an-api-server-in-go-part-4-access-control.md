@@ -301,7 +301,7 @@ type BaseHandler struct {
     TsdRepo *repositories.TimeSeriesDatumRepo
 }
 
-func NewBaseHandler(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*BaseHandler) {
+func New(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*BaseHandler) {
     return &BaseHandler{
         UserRepo: u,
         TsdRepo: tsd,
@@ -756,14 +756,14 @@ func main() {
     userRepo := repositories.NewUserRepo(db)
     tsdRepo := repositories.NewTimeSeriesDatumRepo(db)
 
-    c := controllers.NewBaseHandler(userRepo, tsdRepo)
+    c := controllers.New(userRepo, tsdRepo)
 
-    router := http.NewServeMux()
-    router.HandleFunc("/", controllers.ChainMiddleware(c.HandleRequests))
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", controllers.ChainMiddleware(c.HandleRequests))
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
+        Handler: mux,
 	}
 
     done := make(chan os.Signal, 1)

@@ -228,14 +228,14 @@ func main() {
     userRepo := repositories.NewUserRepo(db)
 
     // NEW: Load our repositories into our controller.
-    c := controllers.NewBaseHandler(userRepo)
+    c := controllers.New(userRepo)
 
-    router := http.NewServeMux()
-    router.HandleFunc("/", c.HandleRequests)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", c.HandleRequests)
 
     srv := &http.Server{
         Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
+        Handler: mux,
     }
 
     done := make(chan os.Signal, 1)
@@ -753,7 +753,7 @@ type BaseHandler struct {
     TsdRepo *repositories.TimeSeriesDatumRepo // NEW
 }
 
-func NewBaseHandler(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*BaseHandler) { // NEW
+func New(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*BaseHandler) { // NEW
     return &BaseHandler{
         UserRepo: u,
         TsdRepo: tsd, // NEW
@@ -824,14 +824,14 @@ func main() {
     userRepo := repositories.NewUserRepo(db)
     tsdRepo := repositories.NewTimeSeriesDatumRepo(db)
 
-    c := controllers.NewBaseHandler(userRepo, tsdRepo)
+    c := controllers.New(userRepo, tsdRepo)
 
-    router := http.NewServeMux()
-    router.HandleFunc("/", c.HandleRequests)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", c.HandleRequests)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
+        Handler: mux,
 	}
 
     done := make(chan os.Signal, 1)

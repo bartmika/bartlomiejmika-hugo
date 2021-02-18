@@ -72,18 +72,18 @@ In Golang, there is no official project structure; as a result, the onus is on t
 We will have the following API endpoints:
 
 {{< highlight bash "linenos=false">}}
-|--------------------------------------------------------------------------------
-| METHOD  | URL                               | DESCRIPTION                    |
-|--------------------------------------------------------------------------------
-| GET     | /api/v1/version                   | Get the application version    |
-| POST    | /api/v1/login                     | Authenticate the user          |
-| POST    | /api/v1/register                  | Creates an account for a user  |
-| GET     | /api/v1/time-series-data          | List all the time-series data  |
-| POST    | /api/v1/time-series-data          | Create a time-series datum     |
-| GET     | /api/v1/time-series-datum/<uuid>  | Get the details of a datum     |
-| PUT     | /api/v1/time-series-datum/<uuid>  | Update a single datum          |
-| DELETE  | /api/v1/time-series-datum/<uuid>  | Delete a single datum          |
-|--------------------------------------------------------------------------------
+|----------------------------------------------------------------------------
+| METHOD | URL                              | DESCRIPTION                   |
+|----------------------------------------------------------------------------
+| GET    | /api/v1/version                  | Get the application version   |
+| POST   | /api/v1/login                    | Authenticate the user         |
+| POST   | /api/v1/register                 | Creates an account for a user |
+| GET    | /api/v1/time-series-data         | List all the time-series data |
+| POST   | /api/v1/time-series-data         | Create a time-series datum    |
+| GET    | /api/v1/time-series-datum/<uuid> | Get the details of a datum    |
+| PUT    | /api/v1/time-series-datum/<uuid> | Update a single datum         |
+| DELETE | /api/v1/time-series-datum/<uuid> | Delete a single datum         |
+|----------------------------------------------------------------------------
 {{</ highlight >}}
 
 # Implementation - Let's build our code! {#5}
@@ -147,14 +147,14 @@ import (
 )
 
 func main() {
-    c := controllers.NewBaseHandler()
+    c := controllers.New()
 
-    router := http.NewServeMux()
-    router.HandleFunc("/", c.HandleRequests)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", c.HandleRequests)
 
     s := &http.Server{
         Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
+        Handler: mux,
     }
 
     if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -177,7 +177,7 @@ type BaseHandler struct {
     //TODO: Implement in the future.
 }
 
-func NewBaseHandler() (*BaseHandler) {
+func New() (*BaseHandler) {
     return &BaseHandler{}
 }
 
@@ -232,7 +232,7 @@ type BaseHandler struct {
     UserRepo *repositories.UserRepo
 }
 
-func NewBaseHandler() (*BaseHandler) {
+func New() (*BaseHandler) {
     return &BaseHandler{}
 }
 
@@ -262,7 +262,7 @@ func (h *BaseHandler) HandleRequests(w http.ResponseWriter, r *http.Request) {
 Finally start the server and confirm everything works:
 
 {{< highlight bash "linenos=false">}}
-$ SERVERPORT=5000 go run cmd/serve.go;
+$ go run cmd/serve/main.go;
 {{</ highlight >}}
 
 If you see a message saying the server started then congratulations, you have setup the project scaffolding!
@@ -275,7 +275,7 @@ Before you begin, please install the [``httpie``](https://httpie.io/) applicatio
 $ http get 127.0.0.1:5000/api/v1/version
 {{</ highlight >}}
 
-If you get a result somewhat similar like this, then condradulations!
+If you get a result somewhat similar like this, then congratulations! Please note if you are using Windows with ``Git bash for Windows`` and it hangs, then please [visit this url for a solution](https://stackoverflow.com/a/41192693).
 
 {{< highlight bash "linenos=false">}}
 Last login: Thu Jan 28 00:10:01 on ttys015
@@ -286,6 +286,15 @@ Content-Type: application/json
 Date: Fri, 29 Jan 2021 05:03:22 GMT
 
 Mulberry Server v1.0
+{{</ highlight >}}
+
+If you are *not* using [``httpie``](https://httpie.io/) you can use ``curl``. Here is what you would write in your terminal:
+
+{{< highlight bash "linenos=false">}}
+$ curl -X GET \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  "http://127.0.0.1:5000/api/v1/version"
 {{</ highlight >}}
 
 # Implement remaining API endpoints
@@ -386,7 +395,7 @@ type BaseHandler struct {
     //TODO: Implement in the future.
 }
 
-func NewBaseHandler() (*BaseHandler) {
+func New() (*BaseHandler) {
     return &BaseHandler{}
 }
 
@@ -446,6 +455,55 @@ $ http delete 127.0.0.1:5000/api/v1/time-series-datum/xxx
 
 If you got a ``200 OK`` response with some-sort of string message, then congratulations! You have implemented your server using only the ``net/http`` standard library.
 
+If you want to use the ``curl`` command then run the following:
+
+{{< highlight bash "linenos=false">}}
+$ curl -X GET \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  "http://127.0.0.1:5000/api/v1/version"
+
+$ curl -X POST \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"email":"lalal@lalal.com","password":"lalalal"}' \
+  "http://127.0.0.1:5000/api/v1/login"
+
+$ curl -X POST \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"email":"lalal@lalal.com","password":"lalalal","name":"lalalal"}' \
+  "http://127.0.0.1:5000/api/v1/register"
+
+$ curl -X GET \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  "http://127.0.0.1:5000/api/v1/time-series-data"
+
+$ curl -X POST \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"instrument_id":1,"timestamp":"2021-01-01"}' \
+  "http://127.0.0.1:5000/api/v1/time-series-data"
+
+$ curl -X GET \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  "http://127.0.0.1:5000/api/v1/time-series-datum/xxx"
+
+$ curl -X PUT \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  -d '{"instrument_id":1,"timestamp":"2021-01-01"}' \
+  "http://127.0.0.1:5000/api/v1/time-series-datum/xxx"
+
+$ curl -X DELETE \
+  -H "Content-type: application/json" \
+  -H "Accept: application/json" \
+  "http://127.0.0.1:5000/api/v1/time-series-datum/xxx"
+
+{{</ highlight >}}
+
 # Graceful Shutdown
 
 Update the **main.go** file with the following content to support graceful shutdowns of our webserver.
@@ -468,14 +526,14 @@ import (
 )
 
 func main() {
-    c := controllers.NewBaseHandler()
+    c := controllers.New()
 
-    router := http.NewServeMux()
-    router.HandleFunc("/", c.HandleRequests)
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", c.HandleRequests)
 
 	srv := &http.Server{
 		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
-        Handler: router,
+        Handler: mux,
 	}
 
     done := make(chan os.Signal, 1)

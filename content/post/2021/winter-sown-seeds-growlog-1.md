@@ -1,5 +1,5 @@
 ---
-title: "Winter Sown Seeds Weblog #1"
+title: "Winter Sown Seeds Growlog #1"
 date: 2021-02-06T22:49:54-05:00
 draft: false
 categories:
@@ -9,7 +9,6 @@ tags:
 - "Agroforestry"
 - "Seeds"
 - "Trees"
-- "Indoor Gardening"
 ---
 
 ![Cover Image](/img/2021/02-06/Seed-Containers.jpg)
