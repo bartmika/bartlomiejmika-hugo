@@ -519,8 +519,8 @@ import (
     "net/http"
     "os"
     "os/signal"
-	"syscall"
-	"time"
+    "syscall"
+    "time"
 
     "github.com/bartmika/mulberry-server/internal/controllers"
 )
@@ -531,20 +531,20 @@ func main() {
     mux := http.NewServeMux()
     mux.HandleFunc("/", c.HandleRequests)
 
-	srv := &http.Server{
-		Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
+    srv := &http.Server{
+        Addr: fmt.Sprintf("%s:%s", "localhost", "5000"),
         Handler: mux,
-	}
+    }
 
     done := make(chan os.Signal, 1)
-	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+    signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
     go runMainRuntimeLoop(srv)
 
-	log.Print("Server Started")
+    log.Print("Server Started")
 
-	// Run the main loop blocking code.
-	<-done
+    // Run the main loop blocking code.
+    <-done
 
     stopMainRuntimeLoop(srv)
 }
@@ -559,16 +559,16 @@ func stopMainRuntimeLoop(srv *http.Server) {
     log.Printf("Starting graceful shutdown now...")
 
     // Execute the graceful shutdown sub-routine which will terminate any
-	// active connections and reject any new connections.
+    // active connections and reject any new connections.
     ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer func() {
-		// extra handling here
-		cancel()
-	}()
+    defer func() {
+        // extra handling here
+        cancel()
+    }()
 
-	if err := srv.Shutdown(ctx); err != nil {
-		log.Fatalf("Server Shutdown Failed:%+v", err)
-	}
+    if err := srv.Shutdown(ctx); err != nil {
+        log.Fatalf("Server Shutdown Failed:%+v", err)
+    }
     log.Printf("Graceful shutdown finished.")
     log.Print("Server Exited")
 }
