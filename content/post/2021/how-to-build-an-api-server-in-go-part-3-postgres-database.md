@@ -547,7 +547,7 @@ import (
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/register email="fherbert@dune.com" password="the-spice-must-flow" name="Frank Herbert"
-func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     // Initialize our array which will store all the results from the remote server.
@@ -567,7 +567,7 @@ func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     fmt.Println(requestData.Password)
 
     // Lookup the email and if it is not unique we need to generate a `400 Bad Request` response.
-    if userFound, _ := h.UserRepo.FindByEmail(ctx, requestData.Email); userFound != nil {
+    if userFound, _ := c.UserRepo.FindByEmail(ctx, requestData.Email); userFound != nil {
         http.Error(w, "Email alread exists", http.StatusBadRequest)
         return
     }
@@ -583,7 +583,7 @@ func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     }
 
     // Save our new user account.
-    if err := h.UserRepo.Create(ctx, uid, requestData.Name, requestData.Email, passwordHash); err != nil {
+    if err := c.UserRepo.Create(ctx, uid, requestData.Name, requestData.Email, passwordHash); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
@@ -601,7 +601,7 @@ func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" password="the-spice-must-flow"
-func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     var requestData models.LoginRequest
@@ -617,7 +617,7 @@ func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
     fmt.Println(requestData.Password)
 
     // Lookup the user in our database, else return a `400 Bad Request` error.
-    user, err := h.UserRepo.FindByEmail(ctx, requestData.Email)
+    user, err := c.UserRepo.FindByEmail(ctx, requestData.Email)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -669,12 +669,12 @@ import (
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-data
-func (h *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     //TODO: Add filtering based on the authenticated user account. For now just list all the records.
     //      In a future article we will update this code.
-    results, err := h.TsdRepo.ListAll(ctx)
+    results, err := c.TsdRepo.ListAll(ctx)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -689,7 +689,7 @@ func (h *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/time-series-data instrument_uuid="lalala" value="123" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     var requestData models.TimeSeriesDatumCreateRequest
     if err := json.NewDecoder(r.Body).Decode(&requestData); err != nil {
@@ -707,7 +707,7 @@ func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) 
     uid := uuid.New().String()
 
     // Save to our database.
-    err := h.TsdRepo.Create(ctx, uid, requestData.InstrumentUuid, requestData.Value, requestData.Timestamp, requestData.UserUuid)
+    err := c.TsdRepo.Create(ctx, uid, requestData.InstrumentUuid, requestData.Value, requestData.Timestamp, requestData.UserUuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -731,11 +731,11 @@ func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) 
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
+func (c *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
     ctx := r.Context()
 
     // Lookup our record.
-    tsd, err := h.TsdRepo.FindByUuid(ctx, uuid)
+    tsd, err := c.TsdRepo.FindByUuid(ctx, uuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -750,7 +750,7 @@ func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, 
 
 // To run this API, try running in your console:
 // $ http put 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569 instrument_uuid="lalala" value="321" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (c *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
 
     var requestData models.TimeSeriesDatumPutRequest
@@ -774,7 +774,7 @@ func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, 
         Timestamp: requestData.Timestamp,
         UserUuid: requestData.UserUuid,
     }
-    err := h.TsdRepo.Save(ctx, &tsd)
+    err := c.TsdRepo.Save(ctx, &tsd)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -789,10 +789,10 @@ func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, 
 
 // To run this API, try running in your console:
 // $ http delete 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (c *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
 
-    if err := h.TsdRepo.DeleteByUuid(ctx, uid); err != nil {
+    if err := c.TsdRepo.DeleteByUuid(ctx, uid); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
     }
     w.WriteHeader(http.StatusOK) // Note: https://tools.ietf.org/html/rfc7231#section-6.3.1

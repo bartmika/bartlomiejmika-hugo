@@ -181,7 +181,7 @@ func New() (*Controller) {
     return &Controller{}
 }
 
-func (h *Controller) HandleRequests(w http.ResponseWriter, req *http.Request) {
+func (c *Controller) HandleRequests(w http.ResponseWriter, req *http.Request) {
     //TODO: Implement in the future
     //--------------------------------------------------------------------------------
     // GET     | /api/v1/version                   | Get the application version    |
@@ -212,7 +212,7 @@ import (
     "net/http"
 )
 
-func (h *Controller) getVersion(w http.ResponseWriter, req *http.Request) {
+func (c *Controller) getVersion(w http.ResponseWriter, req *http.Request) {
     w.Header().Set("Content-Type", "application/json")
     w.Write([]byte("Mulberry Server v1.0"))
 }
@@ -236,9 +236,9 @@ func New() (*Controller) {
     return &Controller{}
 }
 
-func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
     if r.URL.Path == "/api/v1/version" {
-        h.getVersion(w, r)
+        c.getVersion(w, r)
         return
     }
     //TODO: Implement in the future
@@ -340,23 +340,23 @@ import (
     "net/http"
 )
 
-func (h *Controller) getTimeSeriesData(w http.ResponseWriter, req *http.Request) {
+func (c *Controller) getTimeSeriesData(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: List Time Series Data")) //TODO: IMPLEMENT.
 }
 
-func (h *Controller) postTimeSeriesData(w http.ResponseWriter, req *http.Request) {
+func (c *Controller) postTimeSeriesData(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: Create Series Data")) //TODO: IMPLEMENT.
 }
 
-func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+func (c *Controller) getTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
     w.Write([]byte("TODO: Get Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
 }
 
-func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+func (c *Controller) putTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
     w.Write([]byte("TODO: Update Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
 }
 
-func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
+func (c *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, req *http.Request, uuid string) {
     w.Write([]byte("TODO: Delete Series Datum with UUID: " + uuid)) //TODO: IMPLEMENT.
 }
 {{</ highlight >}}
@@ -371,11 +371,11 @@ import (
     "net/http"
 )
 
-func (h *Controller) postLogin(w http.ResponseWriter, req *http.Request) {
+func (c *Controller) postLogin(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: Logging in...")) //TODO: IMPLEMENT.
 }
 
-func (h *Controller) postRegister(w http.ResponseWriter, req *http.Request) {
+func (c *Controller) postRegister(w http.ResponseWriter, req *http.Request) {
     w.Write([]byte("TODO: Registering...")) //TODO: IMPLEMENT.
 }
 {{</ highlight >}}
@@ -399,7 +399,7 @@ func New() (*Controller) {
     return &Controller{}
 }
 
-func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     // Split path into slash-separated parts, for example, path "/foo/bar"
@@ -412,21 +412,21 @@ func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
 
     switch {
     case n == 1 && p[0] == "version" && r.Method == http.MethodGet:
-        h.getVersion(w, r)
+        c.getVersion(w, r)
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodGet:
-        h.getTimeSeriesData(w, r)
+        c.getTimeSeriesData(w, r)
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodPost:
-        h.postTimeSeriesData(w, r)
+        c.postTimeSeriesData(w, r)
     case n == 1 && p[0] == "login" && r.Method == http.MethodPost:
-        h.postLogin(w, r)
+        c.postLogin(w, r)
     case n == 1 && p[0] == "register" && r.Method == http.MethodPost:
-        h.postRegister(w, r)
+        c.postRegister(w, r)
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodGet:
-        h.getTimeSeriesDatum(w, r, p[1])
+        c.getTimeSeriesDatum(w, r, p[1])
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodPut:
-        h.putTimeSeriesDatum(w, r, p[1])
+        c.putTimeSeriesDatum(w, r, p[1])
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodDelete:
-        h.deleteTimeSeriesDatum(w, r, p[1])
+        c.deleteTimeSeriesDatum(w, r, p[1])
     default:
         http.NotFound(w, r)
     }

@@ -308,7 +308,7 @@ func New(u *repositories.UserRepo, tsd *repositories.TimeSeriesDatumRepo) (*Cont
     }
 }
 
-func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json")
 
     // Get our URL paths which are slash-seperated.
@@ -321,40 +321,40 @@ func (h *Controller) HandleRequests(w http.ResponseWriter, r *http.Request) {
 
     switch {
     case n == 1 && p[0] == "version" && r.Method == http.MethodGet:
-        h.getVersion(w, r)
+        c.getVersion(w, r)
     case n == 1 && p[0] == "login" && r.Method == http.MethodPost:
-        h.postLogin(w, r)
+        c.postLogin(w, r)
     case n == 1 && p[0] == "register" && r.Method == http.MethodPost:
-        h.postRegister(w, r)
+        c.postRegister(w, r)
     case n == 1 && p[0] == "refresh-token" && r.Method == http.MethodPost:
-        h.postRefreshToken(w, r)
+        c.postRefreshToken(w, r)
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodGet:
         if isAuthorized {
-            h.getTimeSeriesData(w, r)
+            c.getTimeSeriesData(w, r)
         } else {
             http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 1 && p[0] == "time-series-data" && r.Method == http.MethodPost:
         if isAuthorized {
-            h.postTimeSeriesData(w, r)
+            c.postTimeSeriesData(w, r)
         } else {
             http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodGet:
         if isAuthorized {
-            h.getTimeSeriesDatum(w, r, p[1])
+            c.getTimeSeriesDatum(w, r, p[1])
         } else {
             http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodPut:
         if isAuthorized {
-            h.putTimeSeriesDatum(w, r, p[1])
+            c.putTimeSeriesDatum(w, r, p[1])
         } else {
             http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
     case n == 2 && p[0] == "time-series-datum" && r.Method == http.MethodDelete:
         if isAuthorized {
-            h.deleteTimeSeriesDatum(w, r, p[1])
+            c.deleteTimeSeriesDatum(w, r, p[1])
         } else {
             http.Error(w, "Unauthorized - access token expired or invalid", http.StatusUnauthorized)
         }
@@ -383,7 +383,7 @@ import (
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/register email="fherbert@dune.com" password="the-spice-must-flow" name="Frank Herbert"
-func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     // Initialize our array which will store all the results from the remote server.
@@ -403,7 +403,7 @@ func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     // fmt.Println(requestData.Password)
 
     // Lookup the email and if it is not unique we need to generate a `400 Bad Request` response.
-    if userFound, _ := h.UserRepo.FindByEmail(ctx, requestData.Email); userFound != nil {
+    if userFound, _ := c.UserRepo.FindByEmail(ctx, requestData.Email); userFound != nil {
         http.Error(w, "Email alread exists", http.StatusBadRequest)
         return
     }
@@ -419,7 +419,7 @@ func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
     }
 
     // Save our new user account.
-    if err := h.UserRepo.Create(ctx, uid, requestData.Name, requestData.Email, passwordHash); err != nil {
+    if err := c.UserRepo.Create(ctx, uid, requestData.Name, requestData.Email, passwordHash); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
     }
@@ -436,7 +436,7 @@ func (h *Controller) postRegister(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/login email="fherbert@dune.com" password="the-spice-must-flow"
-func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
 
     var requestData models.LoginRequest
@@ -452,7 +452,7 @@ func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
     // fmt.Println(requestData.Password)
 
     // Lookup the user in our database, else return a `400 Bad Request` error.
-    user, err := h.UserRepo.FindByEmail(ctx, requestData.Email)
+    user, err := c.UserRepo.FindByEmail(ctx, requestData.Email)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -490,7 +490,7 @@ func (h *Controller) postLogin(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/refresh-token value="xxx"
-func (h *Controller) postRefreshToken(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postRefreshToken(w http.ResponseWriter, r *http.Request) {
     var requestData models.RefreshTokenRequest
 
     err := json.NewDecoder(r.Body).Decode(&requestData)
@@ -554,11 +554,11 @@ import (
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-data
-func (h *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
-    results, err := h.TsdRepo.FilterByUserUuid(ctx, userUuid)
+    results, err := c.TsdRepo.FilterByUserUuid(ctx, userUuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -573,7 +573,7 @@ func (h *Controller) getTimeSeriesData(w http.ResponseWriter, r *http.Request) {
 
 // To run this API, try running in your console:
 // $ http post 127.0.0.1:5000/api/v1/time-series-data instrument_uuid="lalala" value="123" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
+func (c *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
@@ -593,7 +593,7 @@ func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) 
     uid := uuid.New().String()
 
     // Save to our database.
-    err := h.TsdRepo.Create(ctx, uid, requestData.InstrumentUuid, requestData.Value, requestData.Timestamp, userUuid)
+    err := c.TsdRepo.Create(ctx, uid, requestData.InstrumentUuid, requestData.Value, requestData.Timestamp, userUuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -617,12 +617,12 @@ func (h *Controller) postTimeSeriesData(w http.ResponseWriter, r *http.Request) 
 
 // To run this API, try running in your console:
 // $ http get 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
+func (c *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uuid string) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
     // Lookup our record.
-    tsd, err := h.TsdRepo.FindByUuid(ctx, uuid)
+    tsd, err := c.TsdRepo.FindByUuid(ctx, uuid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -643,12 +643,12 @@ func (h *Controller) getTimeSeriesDatum(w http.ResponseWriter, r *http.Request, 
 
 // To run this API, try running in your console:
 // $ http put 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569 instrument_uuid="lalala" value="321" timestamp="2021-01-30T10:20:10.000Z" user_uuid="lalala"
-func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (c *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
     // Lookup our record and enforce account access.
-    tsd, err := h.TsdRepo.FindByUuid(ctx, uid)
+    tsd, err := c.TsdRepo.FindByUuid(ctx, uid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -679,7 +679,7 @@ func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, 
         Timestamp: requestData.Timestamp,
         UserUuid: userUuid,
     }
-    err = h.TsdRepo.Save(ctx, tsd)
+    err = c.TsdRepo.Save(ctx, tsd)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -694,12 +694,12 @@ func (h *Controller) putTimeSeriesDatum(w http.ResponseWriter, r *http.Request, 
 
 // To run this API, try running in your console:
 // $ http delete 127.0.0.1:5000/api/v1/time-series-datum/f3e7b442-f3d4-4c2f-8f8d-d347982c1569
-func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
+func (c *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Request, uid string) {
     ctx := r.Context()
     userUuid := ctx.Value("user_uuid").(string)
 
     // Lookup our record and enforce account access.
-    tsd, err := h.TsdRepo.FindByUuid(ctx, uid)
+    tsd, err := c.TsdRepo.FindByUuid(ctx, uid)
     if err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
         return
@@ -709,7 +709,7 @@ func (h *Controller) deleteTimeSeriesDatum(w http.ResponseWriter, r *http.Reques
         return
     }
 
-    if err := h.TsdRepo.DeleteByUuid(ctx, uid); err != nil {
+    if err := c.TsdRepo.DeleteByUuid(ctx, uid); err != nil {
         http.Error(w, err.Error(), http.StatusInternalServerError)
     }
     w.WriteHeader(http.StatusOK) // Note: https://tools.ietf.org/html/rfc7231#section-6.3.1
