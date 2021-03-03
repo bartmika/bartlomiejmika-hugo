@@ -1,12 +1,12 @@
 ---
 title: "Red Mulberry Growlog #1"
 date: 2021-02-07T00:56:15-05:00
-draft: true
+draft: false
 categories:
 - "Tree Nursery"
 tags:
 - "Grow Journal"
-- "Agroforestry"
+- "Red Mulberry"
 - "Seeds"
 - "Trees"
 ---

@@ -6,7 +6,6 @@ categories:
 - "Tree Nursery"
 tags:
 - "Grow Journal"
-- "Agroforestry"
 - "Seeds"
 - "Trees"
 ---
