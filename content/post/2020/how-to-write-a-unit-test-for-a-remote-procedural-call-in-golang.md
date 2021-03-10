@@ -2,6 +2,7 @@
 title: "How to Write a Unit Test for a Remote Procedural Call in Golang"
 date: 2020-08-13T23:14:55-04:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Programming"
 tags:

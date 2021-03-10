@@ -2,6 +2,7 @@
 title: "Red Mulberry Growlog #1"
 date: 2021-02-07T00:56:15-05:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Tree Nursery"
 tags:

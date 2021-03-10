@@ -2,6 +2,7 @@
 title: "Winter Sown Seeds Growlog #1"
 date: 2021-02-06T22:49:54-05:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Tree Nursery"
 tags:

@@ -3,6 +3,7 @@ title: "How to Start a Personal Blog With Hugo a Static Site Generator Written i
 subtitle: "Let's build a static website from scratch"
 date: 2020-09-07T15:35:07-04:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "development"
 tags:

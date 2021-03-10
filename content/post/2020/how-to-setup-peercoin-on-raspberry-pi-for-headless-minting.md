@@ -2,6 +2,7 @@
 title: "How to Setup Peercoin on Raspberry Pi for Headless Minting"
 date: 2020-07-26T12:15:15-04:00
 draft: False
+author: "Bartlomiej Mika"
 categories:
 - "Developer Operations"
 tags:

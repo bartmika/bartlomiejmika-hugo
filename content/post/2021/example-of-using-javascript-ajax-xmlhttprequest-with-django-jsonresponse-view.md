@@ -2,6 +2,7 @@
 title: "Example of using JavaScript AJAX XmlHttpRequest with Django JsonResponse view"
 date: 2021-01-01T00:00:00-00:00
 draft: true
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:

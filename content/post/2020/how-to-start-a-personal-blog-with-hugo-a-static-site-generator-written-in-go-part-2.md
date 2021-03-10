@@ -3,6 +3,7 @@ title: "How to Start a Personal Blog With Hugo a Static Site Generator Written i
 subtitle: "Let's deploy our website to the internet with GitHub Pages and Namecheap DNS"
 date: 2020-09-07T15:35:08-04:00
 draft: false
+author: "Bartlomiej Mika"
 ---
 
 The purpose of this article is to help you deploy your website to the internet.

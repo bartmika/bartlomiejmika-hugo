@@ -2,6 +2,7 @@
 title: "How to use MessagePack with Django REST Framework and Axios"
 date: 2021-01-01T00:00:00-00:00
 draft: true
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:

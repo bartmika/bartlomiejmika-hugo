@@ -3,6 +3,7 @@ title: "How to Install Hugo From Git Bash for Window Users"
 subtitle: "Learn how to build and install Hugo from source code"
 date: 2020-09-09T22:11:07-04:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:

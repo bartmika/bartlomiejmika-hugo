@@ -3,6 +3,7 @@ title: "How to Build an API Server in Go - Part 3: Postgres Database"
 subtitle: "Learn how to implement the database layer for your webserver"
 date: 2021-01-30T00:02:30-04:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:

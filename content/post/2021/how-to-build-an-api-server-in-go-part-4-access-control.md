@@ -2,6 +2,7 @@
 title: "How to Build an API Server in Go - Part 4: Access Control"
 date: 2021-01-31T00:02:30-04:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:

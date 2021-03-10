@@ -2,6 +2,7 @@
 title: "How to Build an API Server in Go - Part 1: Basic Server"
 date: 2021-01-25T00:02:30-04:00
 draft: false
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:

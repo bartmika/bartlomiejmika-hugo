@@ -2,6 +2,7 @@
 title: "Let's Build a Basic React Native App - Part 1"
 date: 2020-08-28T10:38:31-04:00
 draft: true
+author: "Bartlomiej Mika"
 categories:
 - "Native App Development"
 tags:

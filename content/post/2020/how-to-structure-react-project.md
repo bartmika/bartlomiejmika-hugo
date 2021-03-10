@@ -2,6 +2,7 @@
 title: "How to Structure a React Project"
 date: 2020-08-28T10:38:31-04:00
 draft: true
+author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:
