@@ -127,6 +127,8 @@ techops$ sudo systemctl status nginx
 
 In your browser check [http://159.203.12.17](159.203.12.17) and you should see an output.
 
+![Welcome to Nginx on Ubuntu](/img/2021/03-31/welcome-to-nginx-on-Ubuntu.jpg)
+
 *If you see a page load up with no errors then please take a snapshot in your DigitalOcean droplet so you can return to this latest working configuration later in the tutorial.*
 
 ## Setup Website Home Directory and Domain Name
