@@ -1,7 +1,7 @@
 ---
 title: "Example of using JavaScript AJAX XmlHttpRequest with Django JsonResponse view"
 date: 2021-01-01T00:00:00-00:00
-draft: true
+draft: false
 author: "Bartlomiej Mika"
 categories:
 - "Web Development"
@@ -9,7 +9,6 @@ tags:
 - "Python"
 - "Django"
 - "Django REST Framework"
-- "MessagePack"
 ---
 
 Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScript library pertaining to API calling, the purpose of this article is to explain how to utilize the basic ``XmlHttpRequest`` with your Django project?
