@@ -1,7 +1,7 @@
 ---
 title: "How to Get Go2TV Working With Your Samsung Smart TV"
 date: 2021-04-15T00:22:03-04:00
-draft: true
+draft: false
 ---
 
 A recent reddit post on [/r/golang](https://www.reddit.com/r/golang/) titled [Go2TV - cast videos to UPnP/DLNA MediaRenderers
