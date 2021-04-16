@@ -1,13 +1,14 @@
 ---
-title: "Example of Writing a Simple gRPC Server in Golang"
+title: "Example of Writing a Simple gRPC Server in Golang from Scratch"
 date: 2021-03-27T14:10:03-04:00
-draft: true
+draft: false
 author: "Bartlomiej Mika"
 categories:
 - "Web Development"
 tags:
 - "Golang"
 - "gRPC"
+- "HOWTO"
 ---
 
 How do you write a Golang server using [``gRPC``](https://grpc.io/docs/languages/go/quickstart/) from scratch? Heres how to do it.
