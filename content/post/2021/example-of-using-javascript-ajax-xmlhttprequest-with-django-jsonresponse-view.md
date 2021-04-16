@@ -8,7 +8,6 @@ categories:
 tags:
 - "Python"
 - "Django"
-- "Django REST Framework"
 ---
 
 Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScript library pertaining to API calling, the purpose of this article is to explain how to utilize the basic ``XmlHttpRequest`` with your Django project?
@@ -17,7 +16,7 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
 
 1. Begin by setting up your ``Django`` project:
 
-    ```bash
+    {{< highlight bash "linenos=false">}}
     mkdir ajax_django_example
     cd ajax_django_example/
     virtualenv env
@@ -28,11 +27,11 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
     cd example
     python manage.py startapp hello
     python manage.py runserver
-    ```
+    {{</ highlight >}}
 
 2. Populate your ``views.py`` file:
 
-    ```python
+    {{< highlight python "linenos=false">}}
     # hello/views.py
     from django.http import HttpResponse
     from django.shortcuts import render
@@ -58,11 +57,11 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
 
     # Would you like to know more?
     # https://docs.djangoproject.com/en/2.2/ref/request-response/#jsonresponse-objects
-    ```
+    {{</ highlight >}}
 
 3. Set the ``urls.py`` file:
 
-    ```python
+    {{< highlight python "linenos=false">}}
     # hello/urls.py
     from django.urls import path
 
@@ -73,11 +72,11 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
         path('version', views.get_version, name='version'),
         path('add', views.post_add, name='add'),
     ]
-    ```
+    {{</ highlight >}}
 
 4. Set the project's ``settings.py`` file:
 
-    ```python
+    {{< highlight python "linenos=false">}}
     # example/settings.py
 
     # ...
@@ -103,11 +102,11 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
     ]
 
     # ...
-    ```
+    {{</ highlight >}}
 
 5. Set the project's ``urls.py`` file:
 
-    ```python
+    {{< highlight python "linenos=false">}}
     # example/urls.py
     """example URL Configuration
 
@@ -131,11 +130,11 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
         path('admin/', admin.site.urls),
         path('', include('hello.urls')),
     ]
-    ```
+    {{</ highlight >}}
 
 6. Next step is the JavaScript portion.
 
-    ```javascript
+    {{< highlight javascript "linenos=false">}}
     // hello/templates/hello/index.js
     function getVersion() {
         var xhttp = new XMLHttpRequest();
@@ -162,11 +161,11 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
 
     // Would you like to know more?
     // https://www.w3schools.com/js/js_ajax_intro.asp
-    ```
+    {{</ highlight >}}
 
 7. Continue
 
-    ```html
+    {{< highlight html "linenos=false">}}
     <!-- hello/templates/hello/index.html -->
     <!DOCTYPE html>
     <html>
@@ -191,6 +190,6 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
 
         </body>
     </html>
-    ```
+    {{</ highlight >}}
 
 8. That's it! Test it out the code and you should see it working.
