@@ -36,6 +36,7 @@ hugo new posts/2020/08/20/how-to-use-surge-sh-in-multi-client-projects.md
 hugo new posts/2020/08/28/lets-build-a-basic-react-native-app.md
 hugo new posts/2020/how-to-start-a-personal-blog-with-hugo-a-static-site-generator-written-in-go.md
 hugo new posts/2020/how-to-install-hugo-from-git-bash-for-windows.md
+hugo new posts/2020/what-are-some-best-practises-in-software-engineering.md
 ```
 
 ### Deployment

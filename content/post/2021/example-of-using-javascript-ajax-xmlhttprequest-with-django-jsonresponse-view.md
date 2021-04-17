@@ -10,7 +10,7 @@ tags:
 - "Django"
 ---
 
-Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScript library pertaining to API calling, the purpose of this article is to explain how to utilize the basic ``XmlHttpRequest`` with your Django project?
+Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScript library pertaining to API calling, the purpose of this article is to explain how to utilize the basic ``XmlHttpRequest`` with your Django project.
 
 <!--more-->
 
