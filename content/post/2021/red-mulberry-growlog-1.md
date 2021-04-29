@@ -23,7 +23,8 @@ It is with great excitement and joy, I'd like to introduce to you the first post
 Again this is the first post, you can see the newer posts if you like and return back this post:
 
 * **Red Mulberry Growlog #1**
-* Red Mulberry Growlog #2 (Coming soon)
+* [Red Mulberry Growlog #2](/post/2021/red-mulberry-growlog-2/)
+* Red Mulberry Growlog #3 (Coming soon)
 
 Currently this series has not ended so don't forget to follow this blog if you are interested.
 
@@ -67,7 +68,7 @@ such hybridization could eliminate the endangered Red Mulberry by ‘genetic swa
 And if you want to learn more about why *genetic swamping* happens, there's a scientific article titled ["Asymmetrical introgression between two Morus species (M. alba, M. rubra) that differ in abundance
 "](https://pubmed.ncbi.nlm.nih.gov/16156816/) which you can read if you like.
 
-Knowing this, I decided to go on this grow-adventure to see if I can help grow some of these beautiful native trees which will reward anyone that comes across with wonderfully delicious berries to eat!
+Knowing this, I decided to go on this grow-adventure to see if **I can help grow some of these beautiful native trees in my backyard**.
 
 # What is a red mulberry tree?
 
@@ -110,11 +111,15 @@ N. Amer. Sylv.](http://www.plantillustrations.org/illustration.php?id_illustrati
 
 *Before I began, I had to take into account that red mulberries are at risk to hybridize with the white mulberries when making any seed purchases.*
 
-I committed to grow these beautiful trees and my search for a seed supplier began! After spending a few days researching seed suppliers, I reached out to a few suppliers to get a response to the *hybridizing problem*. In the end, I recieved the following response from [The Incredible Seed Company](https://www.incredibleseeds.ca/):
+I committed to grow these beautiful trees and my search for a seed supplier began! After spending a few days researching seed suppliers, I reached out to a few suppliers to get a response to the *hybridizing problem*. In the end, I received the following response from [The Incredible Seed Company](https://www.incredibleseeds.ca/):
 
 ![The Incredible Seed Company Email](/img/2021/02-07/email.png)
 
-Hurray! My order was placed and I received the seeds.
+Hurray! My order was placed and I received the seeds. I choose to purchase from this company [because their seed stock is ethical sourced](https://www.incredibleseeds.ca/pages/safe-seed-pledge) and they are a [mom & pop home business located in Nova Scotia](https://www.incredibleseeds.ca/pages/about-us).
+
+*My personal philosophy is buy more from what you see of, and I love seeing small businesses grow (pun intended), especially environmentally friendly ones!*
+
+Here is seed packaging I received:
 
 ![Red Mulberry Seed Pack](/img/2021/02-07/red_mulberry_seed_pack.jpg)
 
