@@ -53,22 +53,18 @@ My excitement turned to concern.
 
 # Why did I decide to grow red mulberry trees?
 
+Quite simply, I want to plant a fruit tree in my backyard! After discovery of the local white mulberry tree, I want a similar tree.
+
 Throughout my research, I discovered that our provincial government had released an informative [tree atlas](https://www.ontario.ca/environment-and-energy/tree-atlas) resource which you could lookup different trees which are native to our province. I found the [red mulberry](https://www.ontario.ca/page/red-mulberry) in the listing and noticed the quote:
 
 > Red mulberry is under threat from habitat loss and hybridization with the imported white mulberry from Asia. Snails and slugs also damage young seedlings.
 
-Upon doing some more digging, I discovered this tree species is indeed listed as [endangered](https://www.ontario.ca/page/red-mulberry-species-risk) by the provincial government.
-
-Why are red mulberries endangered? Turns out white mulberries are to blame. The following quote from [TreesCanada](https://treecanada.ca/resources/tree-killers/white-mulberry/) explains that:
-
-> "[At] most Ontario locations of Red Mulberry, White Mulberry is hybridizing with the native tree
-such hybridization could eliminate the endangered Red Mulberry by ‘genetic swamping’"
-> - Source: [TreesCanada](https://treecanada.ca/resources/tree-killers/white-mulberry/)
-
 And if you want to learn more about why *genetic swamping* happens, there's a scientific article titled ["Asymmetrical introgression between two Morus species (M. alba, M. rubra) that differ in abundance
 "](https://pubmed.ncbi.nlm.nih.gov/16156816/) which you can read if you like.
 
-Knowing this, I decided to go on this grow-adventure to see if **I can help grow some of these beautiful native trees in my backyard**.
+So after investigating, I decided I would rather plant the North American variety - *red mulberry tree*.
+
+Knowing this, I decided to go on this grow-adventure to see if **I can help grow some of these beautiful North American variety trees in my backyard**.
 
 # What is a red mulberry tree?
 
