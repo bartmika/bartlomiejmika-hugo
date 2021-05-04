@@ -11,7 +11,7 @@ tags:
 - "HOWTO"
 ---
 
-![](/img/2021/common/go-banner.png)
+![](/img/2021/03-27/grpc.jpg)
 
 How do you write a Golang server using [``gRPC``](https://grpc.io/docs/languages/go/quickstart/) from scratch? Heres how to do it.
 
