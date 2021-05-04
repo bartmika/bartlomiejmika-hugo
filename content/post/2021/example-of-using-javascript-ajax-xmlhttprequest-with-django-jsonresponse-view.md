@@ -10,6 +10,8 @@ tags:
 - "Django"
 ---
 
+![](/img/2020/08/28/joan-gamell-ZS67i1HLllo-unsplash.jpg)
+
 Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScript library pertaining to API calling, the purpose of this article is to explain how to utilize the basic ``XmlHttpRequest`` with your Django project.
 
 <!--more-->
@@ -193,3 +195,5 @@ Forget [Axios](https://github.com/axios/axios) or any other third-party JavaScri
     {{</ highlight >}}
 
 8. That's it! Test it out the code and you should see it working.
+
+Cover photo by [Joan Gamell](https://unsplash.com/@gamell) on [Unsplash](https://unsplash.com).
