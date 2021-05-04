@@ -12,7 +12,7 @@ tags:
 - "HOWTO"
 ---
 
-<!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
+![](/img/2021/common/go-banner.png)
 
 Learn how to protect API endpoints with access and refresh tokens using the third-party [jwt-go](https://github.com/dgrijalva/jwt-go) library.
 

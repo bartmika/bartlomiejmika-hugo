@@ -6,6 +6,8 @@ draft: false
 author: "Bartlomiej Mika"
 ---
 
+![](/img/2020/09/07-hugo-banner.jpeg)
+
 The purpose of this article is to help you deploy your website to the internet.
 
 <!--more-->

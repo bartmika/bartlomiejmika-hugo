@@ -12,7 +12,7 @@ tags:
 - "HOWTO"
 ---
 
-<!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
+![](/img/2021/common/go-banner.png)
 
 The purpose of this post is to learn how our [basic API server](/post/2021/how-to-build-an-api-server-in-go-part-1-basic-server/) can read the body of a *request*. In addition, we will learn how to use an easy-to-use *simple database* for beginners called [scribble](https://github.com/sdomino/scribble).
 

@@ -10,6 +10,8 @@ tags:
 - "DevOps"
 ---
 
+![](/img/2021/03-31/wordpress.jpeg)
+
 Do you setup WordPress sites often and you want instructions you can repeat quickly? The purpose of this HOWTO is to provide a series of copy and paste commands you can use over and over to setup WordPress on an Ubuntu 20 LTS server using DigitalOcean for your future clients.
 
 <!--more-->
@@ -529,3 +531,5 @@ The following articles were invaluable and more-then-inspired this article.
 * https://www.digitalocean.com/community/tutorials/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-20-04
 * https://www.digitalocean.com/community/tutorials/how-to-install-wordpress-with-lemp-on-ubuntu-20-04
 * https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-20-04
+
+Cover photo by [Launchpresso](https://unsplash.com/@launchpresso) on [Unsplash](https://unsplash.com).

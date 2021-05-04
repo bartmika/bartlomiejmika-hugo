@@ -14,6 +14,8 @@ tags:
 - "HOWTO"
 ---
 
+![](/img/2020/09/07-hugo-banner.jpeg)
+
 The purpose of this article is to help beginners understand how to do the [advanced install](https://github.com/gohugoio/hugo#build-and-install-the-binaries-from-source-advanced-install) of [``hugo``](https://github.com/gohugoio/hugo) static site generator (SSG).
 
 <!--more-->

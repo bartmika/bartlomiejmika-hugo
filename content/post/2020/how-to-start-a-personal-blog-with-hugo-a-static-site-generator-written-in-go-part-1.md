@@ -13,6 +13,8 @@ tags:
 - "static site"
 ---
 
+![](/img/2020/09/07-hugo-banner.jpeg)
+
 The purpose of this article is to help you setup a personal blog as quickly as possible. These are the instructions and notes I've written down when setting up my site that I'd like to share.
 
 <!--more-->

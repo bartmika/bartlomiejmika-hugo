@@ -11,7 +11,7 @@ tags:
 - "HOWTO"
 ---
 
-<!-- ![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940) -->
+![](/img/2021/common/go-banner.png)
 
 The purpose of this post is to provide instructions on how to setup a simple RESTful API server, in Golang, using only the [*net/http* package](https://golang.org/pkg/net/http/) and not any other third-party web framework. You will learn how to create REST endpoints within your project that can handle **POST**, **GET**, **PUT** and **DELETE** HTTP requests. This is the first post in a multi-post series.
 

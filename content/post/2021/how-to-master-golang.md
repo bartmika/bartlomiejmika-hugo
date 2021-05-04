@@ -9,7 +9,7 @@ tags:
 - "Golang"
 ---
 
-![](https://images.pexels.com/photos/5582597/pexels-photo-5582597.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940)
+![](/img/2021/common/go-banner.png)
 
 The purpose of this post is to share my catalogue of useful links I've gathered in my quest to better understand Golang. If I've used a webpage to solve a problem, or if I used a link to learn something, then you'll find a link of it here.
 

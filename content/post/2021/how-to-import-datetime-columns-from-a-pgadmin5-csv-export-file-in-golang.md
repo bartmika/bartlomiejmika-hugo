@@ -10,6 +10,8 @@ tags:
 - "Postgres"
 ---
 
+![](/img/2021/common/go-banner.png)
+
 If you've exported from [``PgAdmin``](https://www.pgadmin.org/) a CSV file and tried to import that CSV into your Golang app, you may have noticed there is a challenge with importing the datatime. The purpose of this article contains the code I wrote to help me with this problem.
 
 <!--more-->

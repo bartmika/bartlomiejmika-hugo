@@ -10,6 +10,8 @@ tags:
 - "IoT"
 ---
 
+![](/img/2021/common/go-banner.png)
+
 A recent reddit post on [/r/golang](https://www.reddit.com/r/golang/) titled [Go2TV - cast videos to UPnP/DLNA MediaRenderers
 ](https://www.reddit.com/r/golang/comments/mqu6r0/go2tv_cast_videos_to_upnpdlna_mediarenderers/) caught my interest. In this blog post I'll try to get it working with my Samsung TV.
 
