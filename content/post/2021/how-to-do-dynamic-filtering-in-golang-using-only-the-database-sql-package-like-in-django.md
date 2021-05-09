@@ -1,6 +1,7 @@
 ---
 title: "How to do Dynamic Filtering in Golang using only the Database SQL Package like in Django"
-date: 2021-05-09T15:15:47-04:00
+subtitle: "Learn how to add filters to your list functions in Golang using the database/sql package"
+date: 2021-05-07T15:15:47-04:00
 draft: false
 author: "Bartlomiej Mika"
 categories:
