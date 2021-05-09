@@ -1,5 +1,5 @@
 ---
-title: "How to Master Golang"
+title: "Useful Resources that Helped me Learn Golang over the Years"
 date: 2021-04-08T00:29:06-04:00
 draft: false
 author: "Bartlomiej Mika"
