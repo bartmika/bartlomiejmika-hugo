@@ -117,3 +117,6 @@ A library which is doesn't use the standard library router but instead is built 
 # News Sites to Follow:
 * https://golangdocs.com/
 * https://www.reddit.com/r/golang/
+
+# TODO:
+https://stackoverflow.com/questions/22688906/go-naming-conventions-for-const
