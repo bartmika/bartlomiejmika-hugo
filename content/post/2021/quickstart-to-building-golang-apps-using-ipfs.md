@@ -1,5 +1,5 @@
 ---
-title: "Quickstart to IPFS Programming using Golang"
+title: "Quickstart to Building Golang Apps using IPFS"
 date: 2021-09-26T23:58:04-04:00
 draft: false
 author: "Bartlomiej Mika"
@@ -12,17 +12,17 @@ tags:
 
 ![](/img/2021/09-26/ipfs-logo.webp)
 
-The purpose of this post is to get you up and running [IPFS](http://ipfs.io.ipns.localhost:8080/) as quickly as possible so you can start your learning.
+Do you want to write a Golang app which will use [IPFS](http://ipfs.io)? The purpose of this post is to get you up and running [IPFS](http://ipfs.io) as quickly as possible so you can see what's involved.
 
 <!--more-->
 
 ## Context
 
-I wanted to experiment with [IPFS](http://ipfs.io.ipns.localhost:8080/) with Golang but had difficulty with the [provided tutorial](https://github.com/ipfs/go-ipfs/tree/c9cc09f6f7ebe95da69be6fa92c88e4cb245d90b/docs/examples/go-ipfs-as-a-library). I spent some time researching and wrote some Golang useful code samples you can use to quickly get started running IPFS for programming.
+I wanted to experiment with [IPFS](http://ipfs.io/) with Golang but had difficulty with the [provided tutorial](https://github.com/ipfs/go-ipfs/tree/c9cc09f6f7ebe95da69be6fa92c88e4cb245d90b/docs/examples/go-ipfs-as-a-library). I spent some time researching and wrote some Golang useful code samples you can use to quickly get started running IPFS for programming.
 
 ## Before you begin
 
-Please install [IPFS Desktop](http://docs.ipfs.io.ipns.localhost:8080/install/ipfs-desktop/) before proceeding with the code samples. Once installed, start the desktop and if it connects you are ready to begin.
+Please install [IPFS Desktop](http://docs.ipfs.ioinstall/ipfs-desktop/) before proceeding with the code samples. Once installed, start the desktop and if it connects you are ready to begin.
 
 Also I am assuming you have a home directory where you put your Golang source code you are working on. Mien will be: ``~/go/src/github.com/bartmika``.
 
@@ -141,7 +141,7 @@ There will be three code samples you can use to get working. The purpose of the 
     go run main.go
     ```
 
-7. You should see code being outputted. Spend time and review the code.
+7. You should see code being outputted. Spend time and review the code. Where do you go next? Read the [API documentation](github.com/ipfs/go-ipfs-api).
 
 
 ### Example 2. Send and Receive JSON Data over IPFS
@@ -243,7 +243,7 @@ There will be three code samples you can use to get working. The purpose of the 
     go run main.go
     ```
 
-6. You should see code being outputted. Spend time and review the code.
+6. You should see code being outputted. Spend time and review the code. Where do you go next? Read the [API documentation](github.com/ipfs/go-ipfs-api).
 
 
 ### Example 3. Go IPFS as a Library
