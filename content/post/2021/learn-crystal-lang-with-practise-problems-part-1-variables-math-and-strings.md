@@ -1,5 +1,5 @@
 ---
-title: "Learn Crystal with Practise Problem Exercises - Part 1: Variables Math and Strings"
+title: "Learn Crystal with Practise Problems - Part 1: Variables Math and Strings"
 date: 2021-09-08T23:38:40-04:00
 draft: false
 author: "Bartlomiej Mika"

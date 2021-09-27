@@ -1,7 +1,7 @@
 ---
 title: "Quickstart to IPFS Programming using Golang"
 date: 2021-09-26T23:58:04-04:00
-draft: true
+draft: false
 author: "Bartlomiej Mika"
 categories:
 - "Development"
@@ -296,6 +296,8 @@ I tried the running the [Use go-ipfs as a library to spawn a node and add a file
 
 
 ## Misc: How do I delete all my pinned items?
+
+You may have noticed in your **IPFS Desktop** that the **Settings** navigation has a **PINNING SERVICES** section saying we have some pinned items. We can remove these items.
 
 Simply run the following code in your terminal:
 
