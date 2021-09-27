@@ -210,6 +210,12 @@ float get_light_level()
 }
 {{</ highlight >}}
 
+Please install the following libraries using the **Arduino Library Manager**:
+
+* [ArduinoJson](https://arduinojson.org/)
+* [SparkFun MPL3115](https://github.com/sparkfun/MPL3115A2_Breakout)
+* [SparkFun Si7021](https://github.com/sparkfun/SparkFun_Si701_Breakout_Arduino_Library)
+
 Click save and save the file somewhere, afterwords click the **Verify** button and you should see a success message as follows:
 
 ![](/img/2021/07-09/2.png)

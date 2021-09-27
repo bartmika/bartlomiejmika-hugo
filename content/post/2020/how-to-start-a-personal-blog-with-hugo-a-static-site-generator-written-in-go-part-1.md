@@ -5,7 +5,7 @@ date: 2020-09-07T15:35:07-04:00
 draft: false
 author: "Bartlomiej Mika"
 categories:
-- "development"
+- "Development"
 tags:
 - "golang"
 - "static site generator"

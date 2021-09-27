@@ -4,7 +4,7 @@ date: 2020-08-13T23:14:55-04:00
 draft: false
 author: "Bartlomiej Mika"
 categories:
-- "Programming"
+- "Development"
 tags:
 - "Golang"
 - "RPC"
