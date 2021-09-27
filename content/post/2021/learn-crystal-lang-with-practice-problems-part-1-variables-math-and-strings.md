@@ -1,5 +1,5 @@
 ---
-title: "Learn Crystal with Practise Problems - Part 1: Variables Math and Strings"
+title: "Learn Crystal with Practice Problems - Part 1: Variables Math and Strings"
 date: 2021-09-08T23:38:40-04:00
 draft: false
 author: "Bartlomiej Mika"
@@ -7,17 +7,19 @@ categories:
 - "Development"
 tags:
 - "Crystal-Lang"
+aliases:
+  - /learn-crystal-lang-with-practise-problems-part-1-variables-math-and-strings/
 ---
 
 ![](/img/2021/09-08/jason-d-k65_6C4hu2E-unsplash.jpg)
 
-Are you interested in learning [#Crystal-Lang](/tags/crystal-lang/) but having difficulty because you are a [tactile learner](https://en.wikipedia.org/wiki/Kinesthetic_learning)? The purpose of this tutorial is to provide you practise problems you can try out at your leisure.
+Are you interested in learning [#Crystal-Lang](/tags/crystal-lang/) but having difficulty because you are a [tactile learner](https://en.wikipedia.org/wiki/Kinesthetic_learning)? The purpose of this tutorial is to provide you practice problems you can try out at your leisure.
 
 <!--more-->
 
 Recently on [HackerNews](https://news.ycombinator.com/item?id=27903288) I discovered **crystal-lang**, or sometimes shortened down to just **crystal**, a programming language that fancies itself as *slick as ruby and fast as C* had just become versioned to **1.1.0** via the post titled ["Crystal 1.1.0 is released! (2021)"](https://crystal-lang.org/2021/07/16/1.1.0-released.html). Now that crystal-lang is becoming production ready and becoming more adapted by industry, I thought about learning this language.
 
-The practise problems in this post are to be tried after you have installed the **crystal-lang** compiler and read the following developer docs:
+The practice problems in this post are to be tried after you have installed the **crystal-lang** compiler and read the following developer docs:
 
 * [Getting Started](https://crystal-lang.org/reference/getting_started/index.html)
 * [Hello World](https://crystal-lang.org/reference/tutorials/basics/10_hello_world.html)
@@ -29,7 +31,7 @@ The practise problems in this post are to be tried after you have installed the 
 
 **Absolutely do not proceed if you have not read the above! You have been warned.**.
 
-According to the documentation, once you finish reading the [tutorials](https://crystal-lang.org/reference/tutorials/basics/index.html) section, you are to move on to reading the [language specifications](https://crystal-lang.org/reference/syntax_and_semantics/index.html) section. This is fine but I like to play with the language as I learn to cement the fundamentals; as a result, I am writing this series of blog posts with some practise problems you can try out to assist you with learning **crystal-lang**.
+According to the documentation, once you finish reading the [tutorials](https://crystal-lang.org/reference/tutorials/basics/index.html) section, you are to move on to reading the [language specifications](https://crystal-lang.org/reference/syntax_and_semantics/index.html) section. This is fine but I like to play with the language as I learn to cement the fundamentals; as a result, I am writing this series of blog posts with some practice problems you can try out to assist you with learning **crystal-lang**.
 
 With all this mind, let's begin!
 
