@@ -28,7 +28,7 @@ Also I am assuming you have a home directory where you put your Golang source co
 
 ## IPFS Quickstart
 
-There will be three code samples you can use to get working. The purpose of the three examples are as follows:
+The purpose of the four examples are as follows:
 
 * **Example 1** - Demonstrate how to send and receive simple text data over the IPFS network using your local IPFS daemon.
 
