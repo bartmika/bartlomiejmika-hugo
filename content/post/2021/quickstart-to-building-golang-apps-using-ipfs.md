@@ -36,6 +36,8 @@ There will be three code samples you can use to get working. The purpose of the 
 
 * **Example 3** - Demonstrate how I setup the [Go IPFS as a Library tutorial](https://github.com/ipfs/go-ipfs/tree/c9cc09f6f7ebe95da69be6fa92c88e4cb245d90b/docs/examples/go-ipfs-as-a-library).
 
+* **Example 4** - Demonstrate how to use publish/subscription code via IPFS network. This functionality is typically found in chatting apps for example.
+
 ### Example 1: Send and Receive Text Data over IPFS
 
 1. Create your project in your home `golang` directory.
@@ -293,6 +295,127 @@ I tried the running the [Use go-ipfs as a library to spawn a node and add a file
     ```
 
 6. You should see code being outputted. Spend time and review the code.
+
+
+### Example 4: Publish and Subscribe to Text Data over IPFS
+
+1. Create your project in your home `golang` directory.
+
+    ```bash
+    cd ~/go/src/github.com/bartmika
+    mkdir ipfs-example4
+    cd ipfs-example4
+    ```
+
+2. Initialize our `golang` project:
+
+    ```bash
+    go mod init github.com/bartmika/ipfs-example4
+    ```
+
+3. Get our only dependency.
+
+    ```bash
+    go get github.com/ipfs/go-ipfs-api
+    ```
+
+4. When the dependencies update, your `go.mod` file should look something like this:
+
+    ```go
+    module github.com/bartmika/ipfs-example4
+
+    go 1.16
+
+    require github.com/ipfs/go-ipfs-api v0.2.0
+    ```
+
+5. Create a `main.go` file and populate it with the following code sample:
+
+    ```go
+    package main
+
+    import (
+    	"log"
+    	"time"
+    	// "context"
+
+    	shell "github.com/ipfs/go-ipfs-api"
+    )
+
+    func main() {
+    	//
+    	// Before we begin...
+    	//
+
+    	// Make sure that `pubsub` is enabled by either running:
+    	// (a) ipfs daemon --enable-pubsub-experiment
+    	// (b) Or enable `pubsub` in your `IPFS Desktop`
+
+    	// (c) Create a topic we are to follow.
+    	topic := "some-test-topic-created-by-bart" // You can change to your own value!
+
+    	// (d) Please read more about `pubsub` via the following links:
+    	// - Take a look at pubsub on IPFS via http://blog.ipfs.io.ipns.localhost:8080/25-pubsub/
+
+    	//
+    	// Connect to your local IPFS deamon running in the background.
+    	//
+
+    	// Where your local node is running on localhost:5001
+    	sh := shell.NewShell("localhost:5001")
+
+    	//
+    	// Subscribe to a `topic` in IPFS.
+    	//
+
+    	subscription, err := sh.PubSubSubscribe(topic)
+    	if err != nil {
+    		log.Fatal(err)
+    	}
+    	defer subscription.Cancel()
+
+    	//
+    	// Publish to the `topic` through IPFS.
+    	//
+
+    	go func() {
+    		log.Println("Publisher is about to begin...")
+    		time.Sleep(2 * time.Second)
+
+    		sh.PubSubPublish(topic, "Hello world!!")
+    		log.Println("Finished publishing.")
+    	}()
+
+    	//
+    	// Wait to receive published data in the topic.
+    	//
+
+    	log.Println("Waiting to receive data from publisher on topic...")
+    	res, err := subscription.Next()
+    	if err != nil {
+    		log.Fatal(err)
+    	}
+    	log.Println("Successfully received from published!")
+
+    	//
+    	// Decode the string data.
+    	//
+
+    	log.Println("Received From:", res.From)
+    	str := string(res.Data)
+    	log.Println("Received Data:", str)
+    	log.Println("Received Seqno:", res.Seqno)
+    	log.Println("Received TopicIDs:", res.TopicIDs)
+    }
+    ```
+
+6. Run the code.
+
+    ```bash
+    go run main.go
+    ```
+
+7. You should see code being outputted. Spend time and review the code. Where do you go next? Read the [API documentation](https://github.com/ipfs/go-ipfs-api).
 
 
 ## Misc: How do I delete all my pinned items?
