@@ -180,3 +180,6 @@ public/*
 
 # Do not share private notes I have in regard to this website.
 private.md
+
+# Hugo stuff...
+.hugo_build.lock
