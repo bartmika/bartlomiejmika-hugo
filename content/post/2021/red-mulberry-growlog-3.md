@@ -31,6 +31,8 @@ Currently this series has not ended so don't forget to follow this blog if you a
 ## Winter Strikes Back
 Disaster strikes! The mulberries were taken outside a little too early as winter strikes back and covers them with snow for a few days. I wasn't able to do anything but helpless watch.
 
+#### 2021/03/26
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_2_outside.jpg)
 
 ![Red Mulberry](/img/2021/10-25/red_mulberries_3_outside.jpg)
@@ -39,6 +41,8 @@ Disaster strikes! The mulberries were taken outside a little too early as winter
 
 ## The Return of Spring
 Thankfully the mulberries recovered and began to thrive. Here we have a dragonfly stopped by for a rest.
+
+#### 2021/04/23
 
 ![Red Mulberry](/img/2021/10-25/red_mulberries_7_outside.jpg)
 
@@ -56,6 +60,10 @@ Here a few pictures from the summer of 2021.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_11_outside.jpg)
 
 ### 2. Insects
+#### 2021/08/16
+
+Japanese beetle on a red mulberry leaf.
+![Red Mulberry](/img/2021/10-25/japanese_beetle_on_red_mulberry_leaf.jpeg)
 
 Tiny spider waiting for gnats and smaller flies.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_12_outside.jpg)
@@ -69,7 +77,27 @@ Typical house fly.
 Interesting spider.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_17_outside.jpg)
 
+Cicadas
+![Cicadas](/img/2021/10-25/cicada_01.jpeg)
+
+![Cicadas](/img/2021/10-25/cicada_02.jpeg)
+
+Crane Fly
+![Crane fly on a red mulberry leaf](/img/2021/10-25/crane_fly_on_red_mulberry_leaf.jpeg)
+
+Wolf spider
+![Wolf spider on a red mulberry leaf](/img/2021/10-25/wolf_spider_nest_on_red_mullberry_leaf.jpeg)
+
+Unknown colourful bug
+![Unknown colourful bug on a red mulberry leaf](/img/2021/10-25/unknown_colourful_bug_on_red_mulberry.png)
+
+Wolf spider again ... and not so happy this time!
+![Wolf spider on a red mulberry leaf asserting a defensive posture](/img/2021/10-25/wolf_spider_on_red_mulberry_asserting_a_defensive_posture.jpeg)
+
 ## Summer Continues
+
+#### 2021/08/25
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_18_outside.jpg)
 
 ![Red Mulberry](/img/2021/10-25/red_mulberries_19_outside.jpg)
