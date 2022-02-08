@@ -25,7 +25,8 @@ Again this is the first post, you can see the newer posts if you like and return
 * **Red Mulberry Growlog #1**
 * [Red Mulberry Growlog #2](/post/2021/red-mulberry-growlog-2/)
 * [Red Mulberry Growlog #3](/post/2021/red-mulberry-growlog-3/)
-* Red Mulberry Growlog #4  (Coming soon)
+* [Red Mulberry Growlog #4](/post/2022/red-mulberry-growlog-4)
+* Red Mulberry Growlog #5  (Coming soon)
 
 Currently this series has not ended so don't forget to follow this blog if you are interested.
 

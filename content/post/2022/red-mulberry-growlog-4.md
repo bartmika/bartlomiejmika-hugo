@@ -12,18 +12,51 @@ tags:
 - "Trees"
 ---
 
-![Red Mulberry 2020/11/23](/img/2021/10-25/red_mulberries_1_outside.jpg)
-(Date: 2021-03-19)
+![Red Mulberry](/img/2022/02/08/red_mulberries_1_outside.jpg)
+(Date: 2021-08-25)
 
-Into the over world from the underworld! The mulberries were grown in the basement for the majority of their existence and now are able to live in the outside for the first time. In this [grow journal](/tags/grow-journal/) I'll write about my experience bring the red mulberries into the outside and growing them over summer.
+From summer to winter, this [grow journal](/tags/grow-journal/) post will show a few snapshots from the red-mulberries life.
 
 <!--more-->
 
-This is the third post, you can see the newer posts (or older posts) via these posts:
+This is the fourth post, you can see the newer posts (or older posts) via these posts:
 
 * [Red Mulberry Growlog #1](/post/2021/red-mulberry-growlog-1/)
 * [Red Mulberry Growlog #2](/post/2021/red-mulberry-growlog-2/)
-* **Red Mulberry Growlog #3**
-* Red Mulberry Growlog #4  (Coming soon)
+* [Red Mulberry Growlog #3](/post/2021/red-mulberry-growlog-3/)
+* **Red Mulberry Growlog #4**
+* Red Mulberry Growlog #5  (Coming soon)
 
 Currently this series has not ended so don't forget to follow this blog if you are interested.
+
+
+## Summer's End
+
+#### 2021/08/25
+
+![Red Mulberry](/img/2022/02/08/red_mulberries_2_outside.jpg)
+
+## Fall
+
+#### 2021/09/17
+
+Spider nearby.
+![Spider](/img/2022/02/08/spider.jpeg)
+
+#### 2021/11/25
+
+![Red Mulberry](/img/2022/02/08/red_mulberries_3_outside.jpeg)
+
+#### 2021/12/02
+
+![Red Mulberry](/img/2022/02/08/red_mulberries_4_outside.jpeg)
+
+#### 2021/12/14
+
+![Red Mulberry](/img/2022/02/08/red_mulberries_5_outside.jpeg)
+
+## Winter
+
+#### 2022/01/27
+
+![Red Mulberry](/img/2022/02/08/red_mulberries_6_outside.jpeg)

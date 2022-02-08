@@ -24,7 +24,8 @@ This is the third post, you can see the newer posts (or older posts) via these p
 * [Red Mulberry Growlog #1](/post/2021/red-mulberry-growlog-1/)
 * [Red Mulberry Growlog #2](/post/2021/red-mulberry-growlog-2/)
 * **Red Mulberry Growlog #3**
-* Red Mulberry Growlog #4  (Coming soon)
+* [Red Mulberry Growlog #4](/post/2022/red-mulberry-growlog-4)
+* Red Mulberry Growlog #5  (Coming soon)
 
 Currently this series has not ended so don't forget to follow this blog if you are interested.
 
@@ -94,13 +95,6 @@ Unknown colourful bug
 Wolf spider again ... and not so happy this time!
 ![Wolf spider on a red mulberry leaf asserting a defensive posture](/img/2021/10-25/wolf_spider_on_red_mulberry_asserting_a_defensive_posture.jpeg)
 
-## Summer Continues
-
-#### 2021/08/25
-
-![Red Mulberry](/img/2021/10-25/red_mulberries_18_outside.jpg)
-
-![Red Mulberry](/img/2021/10-25/red_mulberries_19_outside.jpg)
 
 If you want to read about other trees/plants then feel free to checkout my [grow journals](/tags/grow-journal/).
 
