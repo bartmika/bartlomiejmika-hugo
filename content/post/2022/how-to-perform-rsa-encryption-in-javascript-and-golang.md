@@ -26,6 +26,8 @@ In using RSA encryption for Golang, I found the documentation to be mostly avail
 
 After some research, the library I settled on was [`jsencrypt`](https://github.com/travist/jsencrypt) because of the easy-to-understand documentation. With some experimenting, and thanks to [this stack overflow](https://stackoverflow.com/a/36181645) answer, I was able to figure it out.
 
+# Encrypt in React.js, Decrypt with Golang
+
 ## 1 of 2: React.js - Client Side Encryption
 
 **Step 1:** Create the react app:
@@ -190,6 +192,165 @@ func main() {
 	log.Println(string(originText))
 	// OUTPUT:
 	// Hello world!
+}
+```
+
+# Generate Private Public Keys
+If you are building an application which needs to generate RSA key pairs on the client side using JavaScript or server side in Golang, the follow sections contain code you can use.
+
+## Client Side with JavaScript
+
+```javascript
+import { JSEncrypt } from "jsencrypt";
+
+
+function App() {
+    // Start our encryptor.
+    var encrypt = new JSEncrypt();
+
+    // Generate a RSA key pair using the `JSEncrypt` library.
+    var crypt = new JSEncrypt({default_key_size: 2048});
+    var PublicPrivateKey = {
+        PublicKey: crypt.getPublicKey(),
+        PrivateKey:crypt.getPrivateKey()
+    };
+
+    console.log(PublicPrivateKey);
+
+    // PUBLIC KEY
+    var publicKey = PublicPrivateKey.PublicKey;
+
+    console.log(publicKey);
+    /*
+    EXAMPLE OUTPUT:
+
+    -----BEGIN PUBLIC KEY-----
+    MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj7+7e8PgCpjF2zaNbnd6
+    l903kGIVJqh4VZS2m/BrCctNOM/y/2r6BRBUwbtC+Dtz7J8VD1kK8SOuzKyozwc0
+    z50TEFIKpJjX2lPKdpfXWHnbsk7v+5o1fQmmMiQSeZ/+NQ2Nhecj7krdk668cI49
+    b9IhVinJxFqa1XG13o/DoOAVseCujxTk/XdztBw1wnWa9zTozvi/utOOhh/Gqcf9
+    VbkaD0Eh01HIMNVLl3o15ysREkPHvtu/G+hffW8pacB7rGa1+6fj5RpNw11ShxVN
+    01MF+rYz+t2tR3LjYOGJ1CqdfmyJYo6oFyb4ah8OsGnk+bHrIyWoBvpUKBj64JEZ
+    nwIDAQAB
+    -----END PUBLIC KEY-----
+    */
+
+    // PRIVATE KEY
+    var privateKey = PublicPrivateKey.PrivateKey;
+
+    console.log(privateKey);
+    /*
+    EXAMPLE OUTPUT:
+
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIEpAIBAAKCAQEAj7+7e8PgCpjF2zaNbnd6l903kGIVJqh4VZS2m/BrCctNOM/y
+    /2r6BRBUwbtC+Dtz7J8VD1kK8SOuzKyozwc0z50TEFIKpJjX2lPKdpfXWHnbsk7v
+    +5o1fQmmMiQSeZ/+NQ2Nhecj7krdk668cI49b9IhVinJxFqa1XG13o/DoOAVseCu
+    jxTk/XdztBw1wnWa9zTozvi/utOOhh/Gqcf9VbkaD0Eh01HIMNVLl3o15ysREkPH
+    vtu/G+hffW8pacB7rGa1+6fj5RpNw11ShxVN01MF+rYz+t2tR3LjYOGJ1CqdfmyJ
+    Yo6oFyb4ah8OsGnk+bHrIyWoBvpUKBj64JEZnwIDAQABAoIBACd6EjTlEAwY9I1F
+    KAYkTciS+gVuyjw5nAJ0usmMdvjTmjt18FfwuwTU/VHO6Y9eVHGxJol2fKjIkeKn
+    sBxa8Efr7SZYQY/+YZkV1c5H2N31aT5Iq2M/cF0MX1X5zhEUvS04sZsKZTW13bAH
+    Fr0acwjYfks5Yq3H7Cmd9sJOXP064ta6UvtICLdyyHvq3JQPWKnrwfVvsnSmHfLV
+    QKrcALmIYZppzeJINiV45QsDlQXLj+Twp7oNDJ1RJ4H51TLBbmeEwygHDXqH7NXV
+    0lLxgNnNlt2yvxFQ7G7QVcIntbQNILrq0DQDfJ/2YUlxWt9WbfbOD0goxzUzmzQf
+    vzXsGDECgYEA2Inhhbm+lx9WLGGWF9n13PRd10ZJatD7wwzMit6kNy+1p7Z7R+Z5
+    MbtPt0pUBNfvfz2SfMojv+Yhwavt5eP87utHb2ZxgV1yCCRN2ujQLHRcW+vveSjD
+    fwoRjaXEiGKnikIizZcUj9RE22MHB0CqNLW2xjAY02Gw4ImBTrKU7tUCgYEAqfID
+    24SzwSxW7ocE309zstdzlsP5fwLP0iyOcK0Po5dch0XdFrdrir4/XQAh89IXKUAT
+    Dsd5253tAk7E5T0g0CIcpiCLvBbB2vmDs7BO61SS6t8ahoh64Kq4zZombH7Bu+3d
+    Tcazv716Z3L8i09MzHCHlsPiFTjVRA8W18Qc6KMCgYEAoYoDB1rxNxY2mDdY3IRK
+    qcJXe3DA9oHfP7x9nx/HDDB4aRx2TcY/JX2iU4+MrGxXC+poLNYz40YQasYTXMw/
+    dhFpok6fYK3QkwhaWHQUUQWhnSWe6hkh9tUREUXYHxLSAA+knREXUtE9aRkwNhXk
+    pBvntWROMOuRI4ERSR9qgd0CgYEAqNM8k8mLjP6QSZsl8vWJ+YNhV8fNxigz7hXH
+    VxYFMD3AdL2pudRy6DzA05G7KO1vhtIZXJg7bTnA5ob7wMNuInWQwlQYnLx6zh8L
+    f+lJLS0yWlNSlY1ljGTs+4sEWsm9igTt0ULw9Cy2OaiYS4h2wa2UdOiZYv23l0nq
+    JmSzV0MCgYAsCccSf7Btieny/hJQ+nrgdGtZxOCwAFFtfV7WwYCyGszOG0lL2wrk
+    skpr/uvmxZXzVLt4IBJJ0CSDoVHNJ/zrB+tJl+h5iO170WfrGAtnstj6fcRm8ovA
+    cXAYLGdhRQYgznFmQwrCZSd7ZhrFXGi0rb55lm/bX8zc5XIN6MfDZg==
+    -----END RSA PRIVATE KEY-----
+    */
+
+    // Assign our encryptor to utilize the public key.
+    encrypt.setPublicKey(publicKey);
+
+    // Perform our encrypt based on our public key - only private key can read it!
+    var encrypted = encrypt.encrypt("Hello world!");
+
+    // Decrypt with the private key...
+    var decrypt = new JSEncrypt();
+    decrypt.setPrivateKey(privateKey);
+    var uncrypted = decrypt.decrypt(encrypted);
+
+    return (
+        <div>
+          <h1>Ciphertext</h1>
+          <p>{encrypted}</p>
+          <p><b>Copy and paste the above ciphertext into your Golang app</b></p>
+          <h1>Plaintext</h1>
+          <p>{uncrypted}</p>
+        </div>
+    );
+}
+
+export default App;
+```
+
+## Server Side in Golang
+
+```golang
+package main
+
+import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
+	"os"
+)
+
+// Copied from https://stackoverflow.com/a/53077471
+func GenRsaKey(bits int) error {
+	privateKey, err := rsa.GenerateKey(rand.Reader, bits)
+	if err != nil {
+		return err
+	}
+	derStream := x509.MarshalPKCS1PrivateKey(privateKey)
+	block := &pem.Block{
+		Type:  "privete key",
+		Bytes: derStream,
+	}
+	file, err := os.Create("private.pem")
+	if err != nil {
+		return err
+	}
+	err = pem.Encode(file, block)
+	if err != nil {
+		return err
+	}
+	publicKey := &privateKey.PublicKey
+	derPkix, err := x509.MarshalPKIXPublicKey(publicKey)
+	if err != nil {
+		return err
+	}
+	block = &pem.Block{
+		Type:  "public key",
+		Bytes: derPkix,
+	}
+	file, err = os.Create("public.pem")
+	if err != nil {
+		return err
+	}
+	err = pem.Encode(file, block)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func main() {
+	// Generate our RSA key pairs into `private.pem` and `private.pem`.
+	GenRsaKey(2048)
 }
 ```
 
