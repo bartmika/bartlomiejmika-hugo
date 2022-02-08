@@ -15,20 +15,21 @@ tags:
 
 ![RSA Encryption](/img/2022/02/07/fly-d-4Tu-sIOXeA0-unsplash.jpg)
 
-Do you want your React.js (web) frontend app talking to your Golang backend server? In this post, I'll explain how I got cross-devices RSA encryption working in JavaScript and Golang.
+Do you want your **React.js (web)** frontend app talking to your **Golang** backend server? In this post, I'll explain how I got cross-devices RSA encryption working in JavaScript and Golang.
 <!--more-->
 
-To begin, you'll need to familiarize yourself with the basic understanding of **RSA encrpytion**. I found this article a good starting point and would recommend you read it before proceeding further: [Implementing RSA Encryption and Signing in Golang (With Examples)](https://www.sohamkamani.com/golang/rsa-encryption/). Do not proceed any further until you understand the basics!
+# 1. Introduction
+To begin, you'll need to familiarize yourself with the basic understanding of **RSA encryption**. I found this article a good starting point and would recommend you read it before proceeding further: [Implementing RSA Encryption and Signing in Golang (With Examples)](https://www.sohamkamani.com/golang/rsa-encryption/). Do not proceed any further until you understand the basics!
 
-Next, when dealing with security for your app, it's a good idea to step back and get an overall bigger picture. I found this article to be phenomenal resource in helping paint this bigger picture with client-side encryption using cross-platform RSA encryption. Please read this article before proceeding further: [Why & How to build Client-Side Encryption in React.Js and beyond](https://www.linkedin.com/pulse/building-client-side-encryption-reactjs-ricky-s) (archive: [link](https://archive.is/caaan)).
+Next, when dealing with security for your app, it's a good idea to step back and get an overall bigger picture. I found this article to be a phenomenal resource in helping paint this bigger picture with client-side encryption using cross-platform RSA encryption. Please read this article before proceeding further: [Why & How to build Client-Side Encryption in React.Js and beyond](https://www.linkedin.com/pulse/building-client-side-encryption-reactjs-ricky-s) (archive: [link](https://archive.is/caaan)).
 
-In using RSA encryption for Golang, I found the documentation to be mostly available no need for third-party packages as the standard package library was good enough; however, this was not the case with JavaScript. I found this link which gives a good summary of the available encryption libraries to use for JavaScript: [JavaScript Crypto Libraries](https://gist.github.com/jo/8619441).
+In using RSA encryption for Golang, I found the documentation to be mostly available with no need for third-party packages as the standard package library was good enough; however, this was not the case with JavaScript. I found this link which gives a good summary of the available encryption libraries to use for JavaScript: [JavaScript Crypto Libraries](https://gist.github.com/jo/8619441).
 
 After some research, the library I settled on was [`jsencrypt`](https://github.com/travist/jsencrypt) because of the easy-to-understand documentation. With some experimenting, and thanks to [this stack overflow](https://stackoverflow.com/a/36181645) answer, I was able to figure it out.
 
-# 1. Encrypt in JS, Decrypt with Go
+# 2. Encrypt in JS, Decrypt with Go
 
-## 1.1. React.js - Client Side Encryption
+## 2.1. React.js - Client Side Encryption
 
 **Step 1:** Create the react app:
 
@@ -107,7 +108,7 @@ function App() {
 export default App;
 ```
 
-## 1.2. Golang - Server Side Encryption
+## 2.2. Golang - Server Side Encryption
 **Step 1:** Create your Golang app (change according to your configurations):
 
 ```shell
@@ -180,9 +181,9 @@ func main() {
 }
 ```
 
-# 2. Encrypt with Go, Decrypt in JS
+# 3 Encrypt with Go, Decrypt in JS
 
-## 2.1. Encrypt with Go
+## 3.1. Encrypt with Go
 
 ```golang
 package main
@@ -237,7 +238,7 @@ func main() {
 }
 ```
 
-## 2.2. Decrypt in JS
+## 3.2. Decrypt in JS
 
 ```javascript
 import { JSEncrypt } from "jsencrypt";
@@ -281,10 +282,10 @@ function App() {
 export default App;
 ```
 
-# 3. Generate Private Public Keys
+# 4. Generate Private Public Keys
 If you are building an application which needs to generate RSA key pairs on the client side using JavaScript or server side in Golang, the follow sections contain code you can use.
 
-## 3.1. Client Side with JavaScript
+## 4.1. Client Side with JavaScript
 
 ```javascript
 import { JSEncrypt } from "jsencrypt";
@@ -382,7 +383,7 @@ function App() {
 export default App;
 ```
 
-## 3.2. Server Side in Golang
+## 4.2. Server Side in Golang
 
 ```golang
 package main
@@ -440,7 +441,7 @@ func main() {
 }
 ```
 
-## 3.3 Command Line
+## 4.3 Command Line
 
 ```
 openssl genrsa -out key.pem
