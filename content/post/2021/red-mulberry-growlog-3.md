@@ -1,7 +1,7 @@
 ---
 title: "Red Mulberry Growlog #3"
 date: 2021-10-25T23:55:06-04:00
-draft: true
+draft: false
 author: "Bartlomiej Mika"
 categories:
 - "Tree Nursery"
@@ -29,31 +29,51 @@ This is the third post, you can see the newer posts (or older posts) via these p
 Currently this series has not ended so don't forget to follow this blog if you are interested.
 
 ## Winter Strikes Back
+Disaster strikes! The mulberries were taken outside a little too early as winter strikes back and covers them with snow for a few days. I wasn't able to do anything but helpless watch.
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_2_outside.jpg)
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_3_outside.jpg)
-![Red Mulberry](/img/2021/10-25/red_mulberries_4_outside.jpg)
-![Red Mulberry](/img/2021/10-25/red_mulberries_5_outside.jpg)
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_6_outside.jpg)
 
 ## The Return of Spring
+Thankfully the mulberries recovered and began to thrive. Here we have a dragonfly stopped by for a rest.
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_7_outside.jpg)
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_8_outside.jpg)
 
 ## Enter Summer
+Here a few pictures from the summer of 2021.
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_9_outside.jpg)
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_10_outside.jpg)
 
-## Cover Crops
+## Observations
+### 1. Cover Crops
 ![Red Mulberry](/img/2021/10-25/red_mulberries_11_outside.jpg)
 
-## Observations
+### 2. Insects
+
+Tiny spider waiting for gnats and smaller flies.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_12_outside.jpg)
+
+An unknown looking fly.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_13_outside.jpg)
+
+Typical house fly.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_14_outside.jpg)
-![Red Mulberry](/img/2021/10-25/red_mulberries_15_outside.jpg)
-![Red Mulberry](/img/2021/10-25/red_mulberries_16_outside.jpg)
+
+Interesting spider.
 ![Red Mulberry](/img/2021/10-25/red_mulberries_17_outside.jpg)
 
 ## Summer Continues
 ![Red Mulberry](/img/2021/10-25/red_mulberries_18_outside.jpg)
+
 ![Red Mulberry](/img/2021/10-25/red_mulberries_19_outside.jpg)
+
+If you want to read about other trees/plants then feel free to checkout my [grow journals](/tags/grow-journal/).
+
+Has this peeked your curiosity about doing your own growing? Have you tried growing before? Is there anything I could do to improve? Let me know in the comments below.

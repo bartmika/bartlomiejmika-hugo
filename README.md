@@ -38,6 +38,7 @@ hugo new posts/2020/how-to-start-a-personal-blog-with-hugo-a-static-site-generat
 hugo new posts/2020/how-to-install-hugo-from-git-bash-for-windows.md
 hugo new posts/2020/what-are-some-best-practises-in-software-engineering.md
 hugo new post/2022/how-to-perform-rsa-encryption-in-javascript-and-golang.md
+hugo new post/2022/red-mulberry-growlog-3.md
 ```
 
 ### Deployment
