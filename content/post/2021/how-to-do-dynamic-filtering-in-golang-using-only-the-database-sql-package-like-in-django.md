@@ -2,6 +2,7 @@
 title: "How to do Dynamic Filtering in Golang using only the Database SQL Package like in Django"
 subtitle: "Learn how to add filters to your list functions in Golang using the database/sql package"
 date: 2021-05-07T15:15:47-04:00
+lastmod: 2022-02-28T20:12:32-05:00
 draft: false
 author: "Bartlomiej Mika"
 categories:
@@ -27,6 +28,7 @@ This article is broken up as follows:
 * Second attempt (Too complicated)
 * The “variadic function” to the rescue
 * The Solution
+* Extra Solutions
 
 Let's begin!
 
@@ -562,4 +564,284 @@ func (s *ThingRepoImpl) CountByFilter(ctx context.Context, filter *models.ThingF
     err := s.db.QueryRowContext(ctx, query, filterValues...).Scan(&count)
     return count, err
 }
+```
+
+#  Extra Solutions
+
+*2022-02-28 UPDATE: Recently I had someone email me the following question in regards to this article:*
+
+> How do you apply that approach to check for other than "=" conditions?
+
+*I think that's a great question! As a result, I'd like to expand this article to answer.*
+
+*If you dear reader have any questions, don't hesitate to reach out and [contact me](/about/)!*
+
+## How do I filter by Date/time?
+
+Let's setup the following SQL structure. Let's assume the `metric_id` points to another table table with sensors (ex: UV Index), the implementation of that table doesn't matter. Here is our `time_series_data` table:
+
+{{< highlight sql "linenos=false">}}
+CREATE TABLE time_series_data (
+    metric_id BIGINT NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL,
+    value DOUBLE PRECISION NULL,
+    FOREIGN KEY (metric_id) REFERENCES metrics(id) ON DELETE CASCADE,
+    PRIMARY KEY(timestamp, metric_id)
+);
+{{</ highlight >}}
+
+If we want to lookup all records before *2022/02/28* date then we would write:
+
+{{< highlight python "linenos=false">}}
+import datetime
+
+series = TimeSeriesData.objects.filter(timestamp__lte=datetime.date(2022, 02, 28))
+{{</ highlight >}}
+
+Furthermore if we want to find data within a range we can write the follow:
+
+{{< highlight python "linenos=false">}}
+from datetime import date, timedelta
+
+startdate = date.today()
+enddate = startdate + timedelta(days=6)
+series = TimeSeriesData.objects.filter(timestamp__range=[startdate, enddate])
+{{</ highlight >}}
+
+Given the above cases, how do we support it? Let's apply what we learned so far with a few additions. In Django's ORM, if you want to filter, you have the following options:
+
+* `lte` - Less then or equal to.
+* `lt` - Less then.
+* `gte` - Greater then or equal.
+* `gt` - Greater then.
+
+As a result, we'll create fields for each filter case so the code will look as follows:
+
+
+### models/time_series_data.go
+
+```go
+// github.com/bartmika/hello-server/internal/models/time_series_data.go
+package models
+
+import (
+    "context"
+    "time"
+
+    null "gopkg.in/guregu/null.v4"
+)
+
+type TimeSeriesDataFilter struct {
+    // MetricID is used for filtering data from a particular sensor / instrument.
+    MetricID                    uint64    `json:"metric_id"`
+
+    // SortOrder is used for you to pick which ordering to use. Either use `asc` or `desc`.
+    SortOrder                   string    `json:"sort_order"`
+
+    // SortField is used for the specific field to order by.
+    SortField                   string    `json:"sort_field"`
+
+    Offset                      uint64    `json:"offset"`
+    Limit                       uint64    `json:"limit"`
+
+    // The following filters are to be used for specific date/time.
+
+    TimestampGreaterThen        null.Time `json:"timestamp_gt,omitempty"`
+    TimestampGreaterThenOrEqual null.Time `json:"timestamp_gte,omitempty"`
+    TimestampLessThen           null.Time `json:"timestamp_lt,omitempty"`
+    TimestampLessThenOrEqual    null.Time `json:"timestamp_lte,omitempty"`
+}
+
+// TimeSeriesDatum is a row in the `time_series_data` table.
+type TimeSeriesDatum struct {
+    MetricID  uint64     `json:"metric_id"`
+    Timestamp time.Time  `json:"timestamp"`
+    Value     null.Float `json:"value"`
+}
+
+type TimeSeriesDatumRepository interface {
+    ListByFilter(ctx context.Context, filter *TimeSeriesDataFilter) ([]*TimeSeriesDatum, error)
+}
+```
+
+### repositories/time_series_data.go
+
+```go
+// github.com/bartmika/hello-server/internal/repositories/time_series_data.go
+package repositories
+
+import (
+    "context"
+    "database/sql"
+    "strconv"
+    "time"
+
+    "github.com/bartmika/hello-server/internal/models"
+)
+
+type TimeSeriesDatumRepo struct {
+    db *sql.DB
+}
+
+func NewTimeSeriesDatumRepo(db *sql.DB) *TimeSeriesDatumRepo {
+    return &TimeSeriesDatumRepo{
+        db: db,
+    }
+}
+
+func (s *TimeSeriesDatumRepo) listQueryRowsWithFilter(ctx context.Context, query string, f *models.TimeSeriesDataFilter) (*sql.Rows, error) {
+    // Array will hold all the unique values we want to add into the query.
+    var filterValues []interface{}
+
+    // The SQL query statement we will be calling in the database, start
+    // by setting the `tenant_id` placeholder and then append our value to
+    // the array.
+    filterValues = append(filterValues, f.MetricID)
+    query += ` WHERE metric_id = $` + strconv.Itoa(len(filterValues))
+
+    //
+    // The following code will add our filters
+    //
+
+    if !f.TimestampGreaterThenOrEqual.IsZero() {
+        filterValues = append(filterValues, f.TimestampGreaterThenOrEqual)
+        query += ` AND timestamp >= $` + strconv.Itoa(len(filterValues))
+    }
+    if !f.TimestampGreaterThen.IsZero() {
+        filterValues = append(filterValues, f.TimestampGreaterThen)
+        query += ` AND timestamp > $` + strconv.Itoa(len(filterValues))
+    }
+    if !f.TimestampLessThenOrEqual.IsZero() {
+        filterValues = append(filterValues, f.TimestampLessThenOrEqual)
+        query += ` AND timestamp <= $` + strconv.Itoa(len(filterValues))
+    }
+    if !f.TimestampLessThen.IsZero() {
+        filterValues = append(filterValues, f.TimestampLessThen)
+        query += ` AND timestamp < $` + strconv.Itoa(len(filterValues))
+    }
+
+    //
+    // The following code will add our pagination.
+    //
+
+    if f.Offset > 0 {
+        // This step is necessary so please do not delete.
+        f.Offset = f.Offset - 1
+    }
+    query += ` ORDER BY ` + f.SortField + ` ` + f.SortOrder
+    filterValues = append(filterValues, f.Limit)
+    query += ` LIMIT $` + strconv.Itoa(len(filterValues))
+    filterValues = append(filterValues, f.Offset)
+    query += ` OFFSET $` + strconv.Itoa(len(filterValues))
+
+    //
+    // Execute our custom built SQL query to the database.
+    //
+
+    // // For debugging purposes only.
+    // log.Println("TimeSeriesDatumRepo | query:", query)
+    // log.Println("TimeSeriesDatumRepo | filterValues:", filterValues)
+    // log.Println("TimeSeriesDatumRepo | f:", f)
+
+    return s.db.QueryContext(ctx, query, filterValues...)
+}
+
+func (s *TimeSeriesDatumRepo) ListByFilter(ctx context.Context, filter *models.TimeSeriesDataFilter) ([]*models.TimeSeriesDatum, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
+    querySelect := `
+    SELECT
+        metric_id,
+        timestamp,
+        value
+    FROM
+        time_series_data
+    `
+
+    rows, err := s.listQueryRowsWithFilter(ctx, querySelect, filter)
+    if err != nil {
+        return nil, err
+    }
+
+    var arr []*models.TimeSeriesDatum
+    defer rows.Close()
+    for rows.Next() {
+        m := new(models.TimeSeriesDatum)
+        err := rows.Scan(
+            &m.MetricID,
+            &m.Timestamp,
+            &m.Value,
+        )
+        if err != nil {
+            return nil, err
+        }
+        arr = append(arr, m)
+    }
+    err = rows.Err()
+    if err != nil {
+        return nil, err
+    }
+
+    if arr == nil {
+        return []*models.TimeSeriesDatum{}, nil
+    }
+    return arr, err
+}
+```
+
+### Example of Filtering with Dates
+#### Filter by Less than or Equal to
+The following example is how you would get all the data from the beginning to yesterdays date for a particular metric:
+
+```go
+// ...
+
+var mid uint64 = 1 // Pretend its a UV Index meter.
+var nowDT time.Time = time.Now()
+var yesterdayDT time.Time = time.Date(nowDT.Year(), nowDT.Month(), nowDT.Day()-1, 0, 0, 0, 0, nowDT.Location())
+
+f := models.TimeSeriesDataFilter{
+    MetricID:  mid,
+    SortField: "timestamp",
+    SortOrder: "DESC",
+    Offset:                      0,
+    Limit:                       100,
+    TimestampLessThenOrEqual:    yesterdayDT,
+}
+
+arr, err := TimeSeriesDatumRepo.ListByFilter(ctx, &f)
+if err != nil {
+    return err
+}
+
+log.Println(arr) // Return your data.
+```
+
+#### Filter by Range
+The following example is how you would get all the data from yesterday to today (a.k.a. range):
+
+```go
+// ...
+
+var mid uint64 = 1 // Pretend its a UV Index meter.
+var nowDT time.Time = time.Now()
+var yesterdayDT time.Time = time.Date(nowDT.Year(), nowDT.Month(), nowDT.Day()-1, 0, 0, 0, 0, nowDT.Location())
+
+f := models.TimeSeriesDataFilter{
+    MetricID:  mid,
+    SortField: "timestamp",
+    SortOrder: "DESC",
+    Offset:                      0,
+    Limit:                       100,
+    TimestampGreaterThen:        yesterdayDT,
+    TimestampLessThenOrEqual:    nowDT,
+}
+
+arr, err := TimeSeriesDatumRepo.ListByFilter(ctx, &f)
+if err != nil {
+    return err
+}
+
+log.Println(arr) // Return your data.
 ```
