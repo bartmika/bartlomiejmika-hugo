@@ -1,7 +1,7 @@
 ---
 title: "How to Write a Golang App Remotely on a Raspberry Pi Using Atom"
 date: 2022-03-13T00:39:16-05:00
-draft: true
+draft: false
 author: "Bartlomiej Mika"
 categories:
 - "Internet of Things"
