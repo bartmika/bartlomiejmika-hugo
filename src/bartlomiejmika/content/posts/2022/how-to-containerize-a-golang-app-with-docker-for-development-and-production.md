@@ -9,11 +9,13 @@ tags:
 - "Docker"
 - "Golang"
 - "DevOps"
+cover:
+    image: "/img/2022/07/ian-taylor-jOqJbvo1P9g-unsplash.jpg"
+    alt: "Docker"
+    caption: "Photo by [Ian Taylor](https://unsplash.com/@carrier_lost) on [Unsplash](https://unsplash.com/photos/jOqJbvo1P9g)." # display caption under cover
+    relative: false # when using page bundles set this to true
+    hidden: false # only hide on current single page
 ---
-
-
-![Docker](/img/2022/07/ian-taylor-jOqJbvo1P9g-unsplash.jpg)
-Photo by [Ian Taylor](https://unsplash.com/@carrier_lost) on [Unsplash](https://unsplash.com/photos/jOqJbvo1P9g).
 
 Do you want to write a **Golang** app which is containerized with **Docker**? The purpose of this article is to help you quickly get your Golang App containerized for **development** (with hot-reload) and **production** purposes.
 <!--more-->
