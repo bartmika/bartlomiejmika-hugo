@@ -9,13 +9,11 @@ tags:
 - "Docker"
 - "Golang"
 - "DevOps"
-cover:
-    image: "/img/2022/07/ian-taylor-jOqJbvo1P9g-unsplash.jpg"
-    alt: "Docker"
-    caption: "Photo by [Ian Taylor](https://unsplash.com/@carrier_lost) on [Unsplash](https://unsplash.com/photos/jOqJbvo1P9g)." # display caption under cover
-    relative: false # when using page bundles set this to true
-    hidden: false # only hide on current single page
 ---
+
+
+![Docker](/img/2022/07/ian-taylor-jOqJbvo1P9g-unsplash.jpg)
+Photo by [Ian Taylor](https://unsplash.com/@carrier_lost) on [Unsplash](https://unsplash.com/photos/jOqJbvo1P9g).
 
 Do you want to write a **Golang** app which is containerized with **Docker**? The purpose of this article is to help you quickly get your Golang App containerized for **development** (with hot-reload) and **production** purposes.
 <!--more-->
@@ -31,7 +29,7 @@ Don't worry! Docker is a mature toolset which has been around long enough for th
 
 Checkout another article I wrote which will help you learn the basics:
 
-* [**Docker Learning Resources for Absolute Beginners Programming With Golang**](/posts/2021/docker-learning-resources-for-absolute-beginners-programming-with-golang/)
+* [**Docker Learning Resources for Absolute Beginners Programming With Golang**](/post/2021/docker-learning-resources-for-absolute-beginners-programming-with-golang/)
 
 ## Golang and Docker for Development with Hot Reloading
 In this section you'll learn how to setup your Golang app for local development on your machine. The purpose of a development container is to hold all the dependencies (ex: Third-Party Packages like [GORM](https://gorm.io/index.html)), infrastructure (ex: Database, Memory Cache, etc) and your code in manner that assist and improves your development.
