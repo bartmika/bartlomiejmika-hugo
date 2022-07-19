@@ -1,5 +1,5 @@
 ---
-title: "How to Install a Solar Digester"
+title: "How to Install a Solar Food Waste Digester"
 date: 2022-07-08T16:57:57-04:00
 draft: false
 author: "Bartlomiej Mika"
@@ -8,6 +8,8 @@ categories:
 tags:
 - "Composte"
 - "Zero Waste"
+aliases:
+  - /how-to-install-a-solar-digester/
 cover:
     image: "/img/2022/07/08/1.jpg"
     alt: "Algreen Solar Compost Digester for Food and Pet Waste"
